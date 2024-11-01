@@ -1,10 +1,13 @@
-<script setup lang="ts">
-import GameMap from "@/components/GameMap.vue"
-</script>
+<script lang='ts' setup>
 
+</script>
 <template>
-    <v-container fluid>
-        <GameMap></GameMap>
-    </v-container>
+    <GameMap></GameMap>
 </template>
+<script lang='ts'>
+
+export default {
+    name: 'HomeView',
+}
+</script>
 <style lang='less' scoped></style>

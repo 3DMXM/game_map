@@ -2,12 +2,9 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 
-import App from '@/App.vue'
-import router from '@/router'
-import { vuetify } from '@/plugins/vuetify'
-
-import 'element-plus/theme-chalk/dark/css-vars.css'
-import "@/assets/main.less"
+import App from './App.vue'
+import router from './router'
+import { vuetify } from '@/Plugins/vuetify'
 
 const app = createApp(App)
 

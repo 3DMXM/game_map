@@ -28,4 +28,6 @@ coverage
 *.sw?
 
 *.tsbuildinfo
-.vscode
+
+scripts/out
+public/map/test*

@@ -2,33 +2,24 @@ import { fileURLToPath, URL } from 'node:url'
 
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import RadixVueResolver from 'radix-vue/resolver'
+import vueDevTools from 'vite-plugin-vue-devtools'
+
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
-import IconsResolver from 'unplugin-icons/resolver'
 
-// https://vitejs.dev/config/
+
+// https://vite.dev/config/
 export default defineConfig({
     plugins: [
         vue(),
-        // GuiiAIDevToolsVitePlugin(),
-        Components({
-            dts: true,
-            resolvers: [
-                RadixVueResolver(),
-                ElementPlusResolver()
-            ]
-        }),
+        vueDevTools(),
         AutoImport({
-            resolvers: [
-                ElementPlusResolver(),
-                IconsResolver({
-                    prefix: 'Icon',
-                }),
-            ],
+            resolvers: [ElementPlusResolver()],
         }),
-
+        Components({
+            resolvers: [ElementPlusResolver()],
+        }),
     ],
     resolve: {
         alias: {
