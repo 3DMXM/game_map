@@ -3,7 +3,8 @@
   "include": [
     "env.d.ts",
     "src/**/*",
-    "src/**/*.vue"
+    "src/**/*.vue",
+    "*.d.ts"
   ],
   "exclude": [
     "src/**/__tests__/*"
@@ -15,6 +16,9 @@
     "paths": {
       "@/*": [
         "./src/*"
+      ],
+      "@srv/*": [
+        "./src/server/*"
       ]
     }
   }

@@ -29,12 +29,10 @@ def cut_image_auto_zoom(image_path, output_folder, max_zoom=4, base_resolution=1
     for z in range(max_zoom):
         # 计算当前级别图片的目标分辨率
         target_resolution = base_resolution * (2 ** z)
-        print(f"Zoom level {z}: 目标分辨率为 {
-              target_resolution}x{target_resolution}.")
+        print(f"Zoom level {z}: 目标分辨率为 {target_resolution}x{target_resolution}.")
 
         # 调整图片大小到当前级别的分辨率
-        zoomed_img = img.resize(
-            (target_resolution, target_resolution), Image.ANTIALIAS)
+        zoomed_img = img.resize( (target_resolution, target_resolution), Image.LANCZOS)
         zoom_width, zoom_height = zoomed_img.size
 
         # 计算瓦片数量
