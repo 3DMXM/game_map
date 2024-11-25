@@ -31,6 +31,16 @@ const router = createRouter({
                     path: 'gamelist',
                     name: 'GameList',
                     component: () => import('@/views/admin/Game/GameListView.vue')
+                },
+                {
+                    path: 'maplist',
+                    name: 'MapList',
+                    component: () => import('@/views/admin/Map/MapListView.vue')
+                },
+                {
+                    path: 'marktypelist',
+                    name: 'MarkTypelist',
+                    component: () => import('@/views/admin/Mark/MarkTypesListView.vue')
                 }
             ]
         },

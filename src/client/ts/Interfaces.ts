@@ -27,3 +27,24 @@ export interface IGame {
     id: number
     game_name: string
 }
+
+export interface IMap {
+    id: number
+    game_id: number
+    map_name: string
+    map_path: string
+    map_width: number
+    map_height: number
+    map_tile_path: string
+    map_min_zoom: number
+    map_max_zoom: number
+}
+
+export interface IMarksType {
+    id: number
+    map_id: number
+    mark_type_name: string
+    mark_type_parent: string
+    mark_type_icon: string
+    mark_type_scale: string
+}

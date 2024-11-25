@@ -1,5 +1,5 @@
 <script lang='ts' setup>
-import { marked } from '@/Model/marked'
+import { marked } from '@/model/marked'
 import { computed, onMounted } from 'vue';
 import 'github-markdown-css/github-markdown.css'; // 引入 GitHub 样式
 
@@ -31,5 +31,6 @@ export default {
 <style lang='less' scoped>
 .markdown-body {
     background-color: transparent;
+    min-height: auto;
 }
 </style>

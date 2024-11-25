@@ -22,13 +22,13 @@ function save() {
         if (data.code == 0) {
             shewDialog.value = false
             gettableData()
-            form.value = {} as IGame
+            clear()
         }
     })
 }
 
-function edit(scope: { row: IGame }) {
-    form.value = JSON.parse(JSON.stringify(scope.row))
+function edit(row: IGame) {
+    form.value = JSON.parse(JSON.stringify(row))
     shewDialog.value = true
 }
 
@@ -43,6 +43,10 @@ function del(id: number) {
     })
 }
 
+function clear() {
+    form.value = {} as IGame
+}
+
 gettableData()
 
 </script>
@@ -55,11 +59,11 @@ gettableData()
             <el-table-column prop="id" label="id" width="100" />
             <el-table-column prop="game_name" label="名称" width="180" />
             <el-table-column label="操作">
-                <template #default="scope">
-                    <el-button link type="primary" @click="edit(scope)">编辑
+                <template #default="{ row }">
+                    <el-button link type="primary" @click="edit(row)">编辑
                         <el-icon><el-icon-edit /></el-icon>
                     </el-button>
-                    <el-popconfirm :title="`是否要删除${scope.row.game_name}?`" @confirm="del(scope.row.id)">
+                    <el-popconfirm :title="`是否要删除${row.game_name}?`" @confirm="del(row.id)">
                         <template #reference>
                             <el-button link type="danger">删除
                                 <el-icon><el-icon-delete /></el-icon>
@@ -69,7 +73,8 @@ gettableData()
                 </template>
             </el-table-column>
         </el-table>
-        <el-dialog v-model="shewDialog" title="添加游戏" width="400" draggable :close-on-click-modal="false">
+
+        <el-dialog v-model="shewDialog" title="添加游戏" width="400" draggable :close-on-click-modal="false" @close="clear">
             <el-form :label-width="100" @submit.prevent @keyup.enter="save">
                 <el-form-item label="游戏名称">
                     <el-input v-model="form.game_name"></el-input>

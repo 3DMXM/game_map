@@ -15,6 +15,26 @@ let links = [
                 to: '/admin/gamelist'
             }
         ]
+    },
+    {
+        name: '地图',
+        icon: 'mdi-map',
+        children: [
+            {
+                name: '地图列表',
+                to: '/admin/maplist'
+            }
+        ]
+    },
+    {
+        name: '标记点',
+        icon: 'mdi-map-marker',
+        children: [
+            {
+                name: '类型列表',
+                to: '/admin/marktypelist'
+            },
+        ]
     }
 ]
 
