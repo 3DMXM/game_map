@@ -22,3 +22,8 @@ export interface ISeriesLink {
     name: string;
     url: string;
 }
+
+export interface IGame {
+    id: number
+    game_name: string
+}
