@@ -151,7 +151,7 @@ getMapList()
                     <el-button link type="primary" @click="edit(row)">编辑
                         <el-icon><el-icon-edit /></el-icon>
                     </el-button>
-                    <el-popconfirm :title="`是否要删除${row.game_name}?`" @confirm="del(row.id)">
+                    <el-popconfirm :title="`是否要删除『${row.mark_type_name}』?`" @confirm="del(row.id)">
                         <template #reference>
                             <el-button link type="danger">删除
                                 <el-icon><el-icon-delete /></el-icon>

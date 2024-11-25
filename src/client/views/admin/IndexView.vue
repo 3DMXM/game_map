@@ -34,6 +34,10 @@ let links = [
                 name: '类型列表',
                 to: '/admin/marktypelist'
             },
+            {
+                name: '标记点列表',
+                to: '/admin/markslist'
+            }
         ]
     }
 ]

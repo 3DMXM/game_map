@@ -41,6 +41,11 @@ const router = createRouter({
                     path: 'marktypelist',
                     name: 'MarkTypelist',
                     component: () => import('@/views/admin/Mark/MarkTypesListView.vue')
+                },
+                {
+                    path: 'markslist',
+                    name: 'MarksList',
+                    component: () => import('@/views/admin/Mark/MarksListView.vue')
                 }
             ]
         },

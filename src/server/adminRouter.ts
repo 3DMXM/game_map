@@ -108,6 +108,16 @@ router.post("/saveMarkTypes", async (req, res) => {
     res.json({ code: 0 })
 })
 
+router.post("/delMarkTypes", async (req, res) => {
+    const { id } = req.body;
+    const statement = await SQLite.run('DELETE FROM mark_types WHERE id = ?', [id])
+    if (statement.changes && statement.changes > 0) {
+        res.json({ code: 0, msg: '删除成功' })
+    } else {
+        res.json({ code: 401, msg: '删除失败' })
+    }
+})
+
 //#endregion
 
 
