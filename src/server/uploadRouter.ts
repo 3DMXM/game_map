@@ -2,6 +2,7 @@ import express from 'express';
 import multer from 'multer';
 import fs from 'fs'
 import { extname } from 'path'
+import sharp from 'sharp'
 
 const router = express.Router();
 
@@ -22,10 +23,12 @@ const storage = multer.diskStorage({
         cb(null, path); // 文件上传路径
     },
     filename: (req, file, cb) => {
-        cb(null, `${Date.now()}${extname(file.originalname)}`); // 文件名
+        const randomString = Math.random().toString(36).substring(2, 8);
+        cb(null, `${Date.now()}_${randomString}${extname(file.originalname)}`); // 文件名
     }
 });
 const upload = multer({ storage: storage });
+
 
 router.post("/images", upload.single('image'), (req, res) => {
     if (!req.file) {

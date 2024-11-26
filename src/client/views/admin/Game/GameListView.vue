@@ -3,9 +3,11 @@ import type { IGame } from '@/ts/Interfaces';
 import axios from 'axios';
 import { ElMessage } from 'element-plus';
 
-const tableData = ref<IGame[]>([])
+type formType = IGame
+
+const tableData = ref<formType[]>([])
 const shewDialog = ref(false)
-const form = ref<IGame>({} as IGame)
+const form = ref<formType>({} as formType)
 
 async function gettableData() {
     let { data } = await axios.post('/admin/getGameList')
@@ -27,7 +29,7 @@ function save() {
     })
 }
 
-function edit(row: IGame) {
+function edit(row: formType) {
     form.value = JSON.parse(JSON.stringify(row))
     shewDialog.value = true
 }
@@ -44,7 +46,7 @@ function del(id: number) {
 }
 
 function clear() {
-    form.value = {} as IGame
+    form.value = {} as formType
 }
 
 gettableData()

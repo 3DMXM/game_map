@@ -3,9 +3,11 @@ import type { IMap, IGame } from '@/ts/Interfaces';
 import axios from 'axios';
 import { ElMessage } from 'element-plus';
 
-const tableData = ref<IMap[]>([])
+type formType = IMap
+
+const tableData = ref<formType[]>([])
 const shewDialog = ref(false)
-const form = ref<IMap>({} as IMap)
+const form = ref<formType>({} as formType)
 const gameList = ref<IGame[]>([])
 
 async function gettableData() {
@@ -34,12 +36,12 @@ function save() {
     })
 }
 
-function edit(row: IMap) {
+function edit(row: formType) {
     form.value = JSON.parse(JSON.stringify(row))
     shewDialog.value = true
 }
 
-function change(row: IMap) {
+function change(row: formType) {
     form.value = JSON.parse(JSON.stringify(row))
     save()
     ElMessage.success('修改完成')
@@ -57,7 +59,7 @@ function del(id: number) {
 }
 
 function clear() {
-    form.value = {} as IMap
+    form.value = {} as formType
 }
 
 gettableData()

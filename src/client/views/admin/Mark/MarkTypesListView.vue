@@ -3,9 +3,11 @@ import type { IMap, IGame, IMarksType } from '@/ts/Interfaces';
 import axios from 'axios';
 import { ElMessage } from 'element-plus';
 
-const tableData = ref<IMarksType[]>([])
+type formType = IMarksType
+
+const tableData = ref<formType[]>([])
 const shewDialog = ref(false)
-const form = ref<IMarksType>({} as IMarksType)
+const form = ref<formType>({} as formType)
 const gameList = ref<IGame[]>([])
 
 const mapList = ref<IMap[]>([])
@@ -75,12 +77,12 @@ function save() {
     })
 }
 
-function edit(row: IMarksType) {
+function edit(row: formType) {
     form.value = JSON.parse(JSON.stringify(row))
     shewDialog.value = true
 }
 
-function change(row: IMarksType) {
+function change(row: formType) {
     form.value = JSON.parse(JSON.stringify(row))
     save()
     ElMessage.success('修改完成')
@@ -100,7 +102,7 @@ function del(id: number) {
 
 
 function clear() {
-    form.value = {} as IMarksType
+    form.value = {} as formType
 }
 
 async function SaveIcon(base64: string) {
@@ -163,7 +165,7 @@ getMapList()
         </el-table>
 
         <!-- 编辑弹窗 -->
-        <el-dialog v-model="shewDialog" title="添加地图" width="500" draggable :close-on-click-modal="false" @close="clear">
+        <el-dialog v-model="shewDialog" title="添加类型" width="500" draggable :close-on-click-modal="false" @close="clear">
             <el-form :label-width="100" @submit.prevent @keyup.enter="save">
                 <el-form-item label="所属地图">
                     <el-cascader v-model="form.map_id" :options="options" :props="props" filterable></el-cascader>

@@ -118,6 +118,28 @@ router.post("/delMarkTypes", async (req, res) => {
     }
 })
 
+router.post("/getMarksList", async (req, res) => {
+    let marks = await SQLite.all('SELECT * FROM marks')
+    marks = marks.map(item => {
+        item.mark_links = JSON.parse(item.mark_links)
+        item.mark_images = JSON.parse(item.mark_images)
+        return item
+    })
+    res.json({ code: 0, data: marks })
+})
+
+router.post("/saveMarks", async (req, res) => {
+    let { id, mark_type, mark_name, mark_position_x, mark_position_y, mark_des, mark_links, mark_images } = req.body;
+    mark_links = JSON.stringify(mark_links)
+    mark_images = JSON.stringify(mark_images)
+    if (id) {
+        await SQLite.run('UPDATE marks SET mark_type = ?, mark_name = ?, mark_position_x = ?, mark_position_y = ?, mark_des = ?, mark_links = ?, mark_images = ? WHERE id = ?', [mark_type, mark_name, mark_position_x, mark_position_y, mark_des, mark_links, mark_images, id])
+    } else {
+        await SQLite.run('INSERT INTO marks (mark_type, mark_name, mark_position_x, mark_position_y, mark_des, mark_links, mark_images) VALUES (?, ?, ?, ?, ?, ?, ?)', [mark_type, mark_name, mark_position_x, mark_position_y, mark_des, mark_links, mark_images])
+    }
+    res.json({ code: 0 })
+})
+
 //#endregion
 
 

@@ -42,9 +42,20 @@ export interface IMap {
 
 export interface IMarksType {
     id: number
-    map_id: number
+    map_id: number[]
     mark_type_name: string
     mark_type_parent: string
     mark_type_icon: string
     mark_type_scale: string
+}
+
+export interface IMarks {
+    id: number
+    mark_type: number
+    mark_name: string
+    mark_position_x: number
+    mark_position_y: number
+    mark_des: string
+    mark_links: { label: string, url: string }[]
+    mark_images: string[]
 }
