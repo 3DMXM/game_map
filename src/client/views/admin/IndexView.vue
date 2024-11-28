@@ -21,6 +21,10 @@ let links = [
         icon: 'mdi-map',
         children: [
             {
+                name: '瓦片集列表',
+                to: '/admin/tilelist'
+            },
+            {
                 name: '地图列表',
                 to: '/admin/maplist'
             }

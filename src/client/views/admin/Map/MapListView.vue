@@ -1,5 +1,5 @@
 <script lang='ts' setup>
-import type { IMap, IGame } from '@/ts/Interfaces';
+import type { IMap, IGame, ITile } from '@/ts/Interfaces';
 import axios from 'axios';
 import { ElMessage } from 'element-plus';
 
@@ -8,7 +8,9 @@ type formType = IMap
 const tableData = ref<formType[]>([])
 const shewDialog = ref(false)
 const form = ref<formType>({} as formType)
+
 const gameList = ref<IGame[]>([])
+const tileList = ref<ITile[]>([])
 
 async function gettableData() {
     let { data } = await axios.post('/admin/getMapList')
@@ -19,6 +21,12 @@ async function gettableData() {
 function getGameList() {
     axios.post('/admin/getGameList').then(({ data }) => {
         gameList.value = data.data
+    })
+}
+
+function getTileList() {
+    axios.post('/admin/getTileList').then(({ data }) => {
+        tileList.value = data.data
     })
 }
 
@@ -64,6 +72,7 @@ function clear() {
 
 gettableData()
 getGameList()
+getTileList()
 
 </script>
 <template>
@@ -84,7 +93,7 @@ getGameList()
             <el-table-column prop="map_name" label="名称" />
             <el-table-column prop="map_path" label="路径" width="100">
                 <template #default="{ row }">
-                    <el-link :underline="false" type="primary" :href="`/map/${row.map_path}`" target="_blank">
+                    <el-link :underline="false" type="primary" :href="`/games/${row.map_path}`" target="_blank">
                         {{ row.map_path }}
                     </el-link>
                 </template>
@@ -119,26 +128,14 @@ getGameList()
                             :label="item.game_name"></el-option>
                     </el-select>
                 </el-form-item>
+                <el-form-item label="瓦片集">
+                    <el-select v-model="form.tile_id" filterable>
+                        <el-option v-for="item in tileList" :key="item.id" :value="item.id"
+                            :label="item.tile_name"></el-option>
+                    </el-select>
+                </el-form-item>
                 <el-form-item label="SEO路径">
                     <el-input v-model="form.map_path" placeholder="自定义SEO路径"></el-input>
-                </el-form-item>
-                <el-form-item label="地图宽度">
-                    <el-input v-model="form.map_width" type="number"
-                        placeholder="这里的值为原图片宽度, e.g: 16k 为 16384"></el-input>
-                </el-form-item>
-                <el-form-item label="地图高度">
-                    <el-input v-model="form.map_height" type="number"
-                        placeholder="这里的值为原图片高度, e.g: 16k 为 16384"></el-input>
-                </el-form-item>
-                <el-form-item label="瓦片路径">
-                    <el-input v-model="form.map_tile_path"
-                        placeholder="e.g: /map/testMap/out/{z}/tile_{x}_{y}.webp"></el-input>
-                </el-form-item>
-                <el-form-item label="地图最小缩放级别">
-                    <el-input v-model="form.map_min_zoom" type="number" placeholder="瓦片的最小z轴, 一般为 0"></el-input>
-                </el-form-item>
-                <el-form-item label="地图最大缩放级别">
-                    <el-input v-model="form.map_max_zoom" type="number" placeholder="瓦片的最大z轴"></el-input>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="save">添加</el-button>

@@ -31,13 +31,20 @@ export interface IGame {
 export interface IMap {
     id: number
     game_id: number
+    tile_id: number
     map_name: string
     map_path: string
-    map_width: number
-    map_height: number
-    map_tile_path: string
-    map_min_zoom: number
-    map_max_zoom: number
+}
+
+export interface ITile {
+    id: number
+    game_id: number
+    tile_name: string
+    tile_path: string
+    tile_width: number
+    tile_height: number
+    tile_min_zoom: number
+    tile_max_zoom: number
 }
 
 export interface IMarksType {
@@ -46,7 +53,7 @@ export interface IMarksType {
     mark_type_name: string
     mark_type_parent: string
     mark_type_icon: string
-    mark_type_scale: string
+    mark_type_scale: number
 }
 
 export interface IMarks {

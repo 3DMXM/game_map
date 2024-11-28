@@ -1,53 +1,209 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
-import type { ISeries, ISeriesData } from '@/ts/Interfaces'
+import type { IMap, ITile, ISeries, ISeriesData, IMarks, IMarksType } from '@/ts/Interfaces'
 
 import { Vector as VectorLayer } from 'ol/layer'
 import { Vector as VectorSource } from 'ol/source'
 import Feature from 'ol/Feature'
-import { Point } from 'ol/geom'
 import { Icon, Style } from 'ol/style'
-import type { Map } from 'ol'
+import { Map, View, Overlay } from 'ol'
+import TileLayer from 'ol/layer/Tile'
+import XYZ from 'ol/source/XYZ'
+import { defaults as defaultControls } from 'ol/control'
+import { Projection } from 'ol/proj'
+import { Point } from 'ol/geom'
+
+
+interface IMapMarksType extends IMarksType {
+    marks: IMarks[]
+}
 
 export const useMap = defineStore("Map", {
     state: () => ({
-        series: [] as ISeries[],
-        markerLayerData: {} as ISeriesData,
-        olMap: null as Map | null
+        markTypes: [] as IMapMarksType[],
+        markerLayerData: {} as IMarks,
+        olMap: null as Map | null,
+        map: null as IMap & ITile | null,
+        popup: null as Overlay | null,
+        riginalOffset: [0, -15],
+        contextMenu: {
+            map_x: 0,
+            map_y: 0,
+            isContextMenuVisible: false,
+            editMark: {} as IMarks,
+        }
     }),
     actions: {
-        async getSeries(url: string) {
-            let { data: series } = await axios.get(url)
-            this.series = series
-            return this.series
+        // 初始化地图
+        async init(mapPath: string, target?: string | HTMLElement, overlayRef?: HTMLElement) {
+            let mapdata = await this.getMapData(mapPath)
+            if (mapdata) {
+                const localProjection = new Projection({
+                    code: 'LOCAL',
+                    units: 'pixels',
+                    extent: [0, 0, mapdata.tile_width, mapdata.tile_height],
+                })
+                this.olMap = new Map({
+                    target: target,
+                    view: new View({
+                        projection: localProjection,
+                        center: [mapdata.tile_width / 2, mapdata.tile_height / 2],
+                        zoom: 1,
+                        minZoom: 0,
+                        maxZoom: 6,
+                        extent: [0, 0, mapdata.tile_width, mapdata.tile_height], // 设置视图范围
+                    }),
+                    layers: [
+                        new TileLayer({
+                            source: new XYZ({
+                                url: mapdata.tile_path,
+                                projection: localProjection,
+                            }),
+                        }),
+                    ],
+                    controls: defaultControls({
+                        zoom: false, // 禁用缩放控件
+                    }),
+                })
+                // 创建Overlay
+                this.popup = new Overlay({
+                    element: overlayRef,
+                    positioning: 'bottom-center',
+                    stopEvent: false,
+                    offset: this.riginalOffset,
+                })
+                this.olMap.addOverlay(this.popup as Overlay)
+                this.addMaker()
+
+                this.olMap.on('click', (evt) => {
+
+                    // 打印当前点击的坐标
+                    console.log(`点击坐标: ${evt.coordinate}`)
+
+                    if (this.olMap) {
+                        this.olMap.forEachFeatureAtPixel(evt.pixel, (feature) => {
+
+                            if (feature.getGeometry()?.getType() === 'Point') {
+                                const item = feature.get('item')
+
+                                const geometry = feature.getGeometry()
+                                if (geometry?.getType() === 'Point') {
+                                    const position = (geometry as Point).getCoordinates()
+                                    // 设置Popup内容和位置
+                                    this.markerLayerData = item
+                                    // popup.value!.setPosition(position)
+                                    this.adjustPopupPosition(position, overlayRef)
+                                }
+                            }
+                        })
+                    }
+                })
+            }
         },
-        CreatingMarker(series: ISeries[]) {
-            // 创建 VectorSource 和 VectorLayer
+        // 获取地图数据
+        async getMapData(mapPath: string) {
+            const { data: map } = await axios.post("/render/getMapByPath", { path: mapPath })
+            console.log(map);
+            if (map.data.tile_id) {
+                const { data: tile } = await axios.post("/render/getTileById", { id: map.data.tile_id })
+                console.log(tile);
+                this.map = { ...map.data, ...tile.data }
+            }
+
+            return this.map
+        },
+        // 创建 VectorSource 和 VectorLayer
+        CreatingMarker() {
             const markerSource = new VectorSource()
             const markerLayer = new VectorLayer({
                 source: markerSource,
             })
-
-            series.forEach(serie => {
-                serie.data.forEach(item => {
-                    // 创建标记点 Feature，并添加 item 属性
+            this.markTypes.forEach(type => {
+                // 创建标记点 Feature，并添加 item 属性
+                type.marks.forEach(mark => {
                     const marker = new Feature({
-                        geometry: new Point([item.value[0], item.value[1]]), // 设置标记位置
-                        item: item, // 添加 item 属性
+                        geometry: new Point([mark.mark_position_x, mark.mark_position_y]), // 设置标记位置
+                        item: mark, // 添加 item 属性
                     })
                     // 设置标记样式
                     marker.setStyle(new Style({
                         image: new Icon({
-                            src: serie.symbol, // 替换为标记图标的路径
+                            src: type.mark_type_icon, // 替换为标记图标的路径
                             anchor: [0.5, 0.5],
-                            scale: 0.3, // 调整缩放比例以适应大小
+                            scale: type.mark_type_scale, // 调整缩放比例以适应大小 0.3
                         }),
                     }))
                     markerSource.addFeature(marker)
                 })
             })
-
             return markerLayer
+        },
+        async addMaker() {
+            await this.getMarks()
+            this.olMap?.removeLayer(this.olMap.getLayers().getArray()[1])
+            let markerLayer = this.CreatingMarker()
+            this.olMap?.addLayer(markerLayer)
+        },
+        async getMarks() {
+            if (this.map) {
+                let { data } = await axios.post("/render/getMarksByMapId", { map_id: this.map.id, game_id: this.map.game_id })
+                if (data.code == 0) {
+                    this.markTypes = data.data
+                    return this.markTypes
+                }
+            }
+        },
+        adjustPopupPosition(coordinates: number[], overlayRef?: HTMLElement) {
+            if (!this.popup || !this.olMap) return
+            this.popup.setOffset(this.riginalOffset)
+            // 设置初始位置
+            this.popup.setPosition(coordinates)
+            console.log("初始位置", coordinates);
+
+            // 等待下一帧以确保元素已渲染
+            requestAnimationFrame(() => {
+                const popupElement = overlayRef
+                if (!popupElement) return
+                console.log(popupElement);
+
+                const popupRect = popupElement.getBoundingClientRect()
+                const viewportWidth = window.innerWidth
+                const viewportHeight = window.innerHeight
+
+                let offsetX = 0
+                let offsetY = 0
+                // 缓冲
+                const buffer = 0
+
+                // 检查右边界
+                if (popupRect.right > viewportWidth) {
+                    offsetX = viewportWidth - popupRect.right - buffer // 10px 缓冲
+                }
+
+                // 检查左边界
+                if (popupRect.left < 0) {
+                    offsetX = -popupRect.left + buffer
+                }
+
+                // 检查下边界
+                if (popupRect.bottom > viewportHeight) {
+                    offsetY = viewportHeight - popupRect.bottom - buffer
+                }
+
+                // 检查上边界
+                if (popupRect.top < 0) {
+                    offsetY = -popupRect.top + buffer
+                }
+
+                // 应用偏移
+                if (offsetX !== 0 || offsetY !== 0) {
+                    if (this.popup) {
+                        const currentOffset = this.popup.getOffset()
+                        console.log(`偏移: x:${offsetX}, y:${offsetY}`);
+                        this.popup.setOffset([currentOffset[0] + offsetX, currentOffset[1] + offsetY])
+                    }
+                }
+            })
         }
     }
 })

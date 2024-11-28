@@ -6,10 +6,9 @@ import Markdown from '@/components/Model/Markdown.vue'
 
 const usemap = useMap()
 
-
 function position() {
 
-    let location = [usemap.markerLayerData.value[0], usemap.markerLayerData.value[1]]
+    let location = [usemap.markerLayerData.mark_position_x, usemap.markerLayerData.mark_position_y]
     console.log(location);
 
     // 定位到 marker
@@ -26,11 +25,11 @@ function onclose() {
 
 </script>
 <template>
-    <div ref="markerRef" class="layer" v-if="usemap.markerLayerData.name">
+    <div ref="markerRef" class="layer" v-if="usemap.markerLayerData.mark_name">
         <v-card class="card" width="300px">
             <v-card-title>
                 <div class="tooltip-header">
-                    <h3>{{ usemap.markerLayerData.name }}
+                    <h3>{{ usemap.markerLayerData.mark_name }}
                         <el-button link @click="position"><v-icon size="20">mdi-map-marker-outline</v-icon></el-button>
                     </h3>
                     <el-button link @click="onclose">
@@ -40,22 +39,27 @@ function onclose() {
 
             </v-card-title>
             <v-card-text>
-                <Markdown class="tooltip-describe" v-if="usemap.markerLayerData.value[2]"
-                    :md="usemap.markerLayerData.value[2]">
+                <Markdown class="tooltip-describe" v-if="usemap.markerLayerData.mark_des"
+                    :md="usemap.markerLayerData.mark_des">
                 </Markdown>
-                <div v-if="usemap.markerLayerData.value[3] && usemap.markerLayerData.value[3].length > 0">
-                    <v-chip variant="text" label color="#1890ff" v-for="item in usemap.markerLayerData.value[3]"
-                        :href="item.url" target="_blank">{{ item.name }}</v-chip>
+                <div v-if="usemap.markerLayerData.mark_links && usemap.markerLayerData.mark_links.length > 0">
+                    <v-chip variant="text" label color="#1890ff" v-for="link in usemap.markerLayerData.mark_links"
+                        :href="link.url" target="_blank">{{ link.label }}</v-chip>
                 </div>
-                <div v-if="usemap.markerLayerData.value[4] && usemap.markerLayerData.value[4].length > 0">
-                    <v-img class="tooltip-img" v-for="image in usemap.markerLayerData.value[4] " :src="image"
-                        :alt="usemap.markerLayerData.name" />
+                <div v-if="usemap.markerLayerData.mark_images && usemap.markerLayerData.mark_images.length > 0">
+                    <el-carousel height="150px" indicator-position="none">
+                        <el-carousel-item v-for="(image, index) in usemap.markerLayerData.mark_images" :key="index">
+                            <el-image class="tooltip-img" :src="image"
+                                :preview-src-list="usemap.markerLayerData.mark_images" :initial-index="index"
+                                preview-teleported :alt="usemap.markerLayerData.mark_name" />
+                        </el-carousel-item>
+                    </el-carousel>
                 </div>
             </v-card-text>
             <v-card-actions>
                 <div class="footer">
                     <div class="left">
-                        <el-button link>
+                        <!-- <el-button link>
                             <el-badge color="error" value="536">
                                 <v-icon>mdi-comment-outline</v-icon>
                             </el-badge>
@@ -65,11 +69,16 @@ function onclose() {
                                 <v-icon>mdi-thumb-up-outline</v-icon>
                             </el-badge>
                         </el-button>
-                        <el-button link><v-icon>mdi-link-variant</v-icon></el-button>
+                        <el-button link><v-icon>mdi-link-variant</v-icon></el-button> -->
                     </div>
                     <div class="right">
-                        <v-btn variant="text">编辑</v-btn>
-                        <v-btn variant="text">标记</v-btn>
+                        <AddMarker>
+                            <template #operate="{ onShow }">
+                                <v-btn variant="text" @click="onShow(usemap.markerLayerData)"
+                                    append-icon="mdi-square-edit-outline">编辑</v-btn>
+                            </template>
+                        </AddMarker>
+                        <!-- <v-btn variant="text">标记</v-btn> -->
                     </div>
                 </div>
             </v-card-actions>

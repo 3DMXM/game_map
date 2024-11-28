@@ -16,7 +16,7 @@ export default defineConfig({
         vue(),
         vueDevTools(),
         AutoImport({
-            imports: ['vue'],
+            imports: ['vue', 'vue-router'],
             resolvers: [
                 ElementPlusResolver(),
                 // 自动导入图标组件
@@ -24,7 +24,6 @@ export default defineConfig({
                     prefix: 'Icon',
                 }),
             ],
-
         }),
         Components({
             dirs: ['src/client/components'],

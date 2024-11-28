@@ -10,6 +10,16 @@ const router = createRouter({
             component: () => import('@/views/HomeView.vue')
         },
         {
+            path: '/games',
+            name: 'Games',
+            component: () => import('@/views/Game/GamesView.vue')
+        },
+        {
+            path: '/games/:path',
+            name: 'GameMap',
+            component: () => import('@/views/Game/MapView.vue')
+        },
+        {
             path: '/admin',
             name: 'Admin',
             component: () => import('@/views/admin/IndexView.vue'),
@@ -36,6 +46,11 @@ const router = createRouter({
                     path: 'maplist',
                     name: 'MapList',
                     component: () => import('@/views/admin/Map/MapListView.vue')
+                },
+                {
+                    path: 'tilelist',
+                    name: 'TileList',
+                    component: () => import('@/views/admin/Map/TileListView.vue')
                 },
                 {
                     path: 'marktypelist',

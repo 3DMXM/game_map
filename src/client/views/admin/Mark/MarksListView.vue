@@ -222,7 +222,8 @@ getMarkTypesList()
         </el-table>
 
         <!-- 编辑弹窗 -->
-        <el-dialog v-model="shewDialog" title="添加地图" width="500" draggable :close-on-click-modal="false" @close="clear">
+        <el-dialog v-model="shewDialog" title="添加标记点" width="500" draggable :close-on-click-modal="false"
+            @close="clear">
             <el-form :label-width="100" @submit.prevent>
                 <el-form-item label="类型">
                     <el-cascader v-model="form.mark_type" :options="options" :props="props" filterable

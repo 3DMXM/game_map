@@ -55,11 +55,11 @@ router.post('/getMapList', async (req, res) => {
 })
 
 router.post('/saveMap', async (req, res) => {
-    const { id, game_id, map_name, map_path, map_width, map_height, map_tile_path, map_min_zoom, map_max_zoom } = req.body;
+    const { id, game_id, map_name, map_path, tile_id } = req.body;
     if (id) {
-        await SQLite.run('UPDATE maps SET game_id = ?, map_name = ?, map_path = ?, map_width = ?, map_height = ?, map_tile_path = ?, map_min_zoom = ?, map_max_zoom = ? WHERE id = ?', [game_id, map_name, map_path, map_width, map_height, map_tile_path, map_min_zoom, map_max_zoom, id])
+        await SQLite.run('UPDATE maps SET game_id = ?, map_name = ?, map_path = ?, tile_id = ? WHERE id = ?', [game_id, map_name, map_path, tile_id, id])
     } else {
-        await SQLite.run('INSERT INTO maps (game_id, map_name, map_path, map_width, map_height, map_tile_path, map_min_zoom, map_max_zoom) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', [game_id, map_name, map_path, map_width, map_height, map_tile_path, map_min_zoom, map_max_zoom])
+        await SQLite.run('INSERT INTO maps (game_id, map_name, map_path, tile_id) VALUES (?, ?, ?, ?)', [game_id, map_name, map_path, tile_id])
     }
     res.json({ code: 0 })
 })
@@ -67,6 +67,32 @@ router.post('/saveMap', async (req, res) => {
 router.post("/delMap", async (req, res) => {
     const { id } = req.body;
     const statement = await SQLite.run('DELETE FROM maps WHERE id = ?', [id])
+    if (statement.changes && statement.changes > 0) {
+        res.json({ code: 0, msg: '删除成功' })
+    } else {
+        res.json({ code: 401, msg: '删除失败' })
+    }
+})
+
+
+router.post('/getTileList', async (req, res) => {
+    let tiles = await SQLite.all('SELECT * FROM tiles')
+    res.json({ code: 0, data: tiles })
+})
+
+router.post('/saveTile', async (req, res) => {
+    const { id, game_id, tile_name, tile_path, tile_width, tile_height, tile_min_zoom, tile_max_zoom } = req.body;
+    if (id) {
+        await SQLite.run('UPDATE tiles SET game_id = ?, tile_name = ?, tile_path = ?, tile_width = ?, tile_height = ?, tile_min_zoom = ?, tile_max_zoom = ? WHERE id = ?', [game_id, tile_name, tile_path, tile_width, tile_height, tile_min_zoom, tile_max_zoom, id])
+    } else {
+        await SQLite.run('INSERT INTO tiles (game_id, tile_name, tile_path, tile_width, tile_height, tile_min_zoom, tile_max_zoom) VALUES (?, ?, ?, ?, ?, ?, ?)', [game_id, tile_name, tile_path, tile_width, tile_height, tile_min_zoom, tile_max_zoom])
+    }
+    res.json({ code: 0 })
+})
+
+router.post("/delTile", async (req, res) => {
+    const { id } = req.body;
+    const statement = await SQLite.run('DELETE FROM tiles WHERE id = ?', [id])
     if (statement.changes && statement.changes > 0) {
         res.json({ code: 0, msg: '删除成功' })
     } else {

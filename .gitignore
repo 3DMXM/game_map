@@ -26,3 +26,6 @@ dist-ssr
 .venv
 public/map/*
 public/uploads/*
+
+scripts/out/*
+files/*
