@@ -5,6 +5,8 @@ import { exec } from 'child_process'
 export class Unzip {
     private static async get7zPath() {
         // 判断系统 如果是 Ubuntu
+        console.log("process.platform:", process.platform);
+
         if (process.platform === 'linux') {
             return '7z'
         }
