@@ -51,15 +51,20 @@ router.post("/delGame", async (req, res) => {
 //#region 地图相关
 router.post('/getMapList', async (req, res) => {
     let maps = await SQLite.all('SELECT * FROM maps')
+    maps = maps.map(item => {
+        item.map_view_offset = JSON.parse(item.map_view_offset)
+        return item
+    })
     res.json({ code: 0, data: maps })
 })
 
 router.post('/saveMap', async (req, res) => {
-    const { id, game_id, map_name, map_path, tile_id } = req.body;
+    let { id, game_id, map_name, map_path, tile_id, map_view_offset } = req.body;
+    map_view_offset = JSON.stringify(map_view_offset)
     if (id) {
-        await SQLite.run('UPDATE maps SET game_id = ?, map_name = ?, map_path = ?, tile_id = ? WHERE id = ?', [game_id, map_name, map_path, tile_id, id])
+        await SQLite.run('UPDATE maps SET game_id = ?, map_name = ?, map_path = ?, tile_id = ?, map_view_offset = ? WHERE id = ?', [game_id, map_name, map_path, tile_id, map_view_offset, id])
     } else {
-        await SQLite.run('INSERT INTO maps (game_id, map_name, map_path, tile_id) VALUES (?, ?, ?, ?)', [game_id, map_name, map_path, tile_id])
+        await SQLite.run('INSERT INTO maps (game_id, map_name, map_path, tile_id, map_view_offset) VALUES (?, ?, ?, ?, ?)', [game_id, map_name, map_path, tile_id, map_view_offset])
     }
     res.json({ code: 0 })
 })

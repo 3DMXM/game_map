@@ -34,6 +34,7 @@ export interface IMap {
     tile_id: number
     map_name: string
     map_path: string
+    map_view_offset: number[]
 }
 
 export interface ITile {
@@ -54,6 +55,7 @@ export interface IMarksType {
     mark_type_parent: string
     mark_type_icon: string
     mark_type_scale: number
+    mark_type_is_show: boolean
 }
 
 export interface IMarks {
@@ -65,4 +67,8 @@ export interface IMarks {
     mark_des: string
     mark_links: { label: string, url: string }[]
     mark_images: string[]
+}
+
+export interface IMapMarksType extends IMarksType {
+    marks: IMarks[]
 }

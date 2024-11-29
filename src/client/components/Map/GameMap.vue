@@ -18,25 +18,13 @@ const route = useRoute()
 
 console.log(route.params);
 
-
-const imgW = 16384
-const imgH = 16384
-const riginalOffset = [0, -15]
-
-// Popup相关
-const popup = ref<Overlay>()
+watch(() => route.params.path, () => {
+    reader()
+})
 
 // 右键菜单相关
 // const isContextMenuVisible = ref(false)
 const contextMenuPosition = ref<{ x: number, y: number }>({ x: 0, y: 0 })
-
-
-// 定义本地坐标系
-const localProjection = new Projection({
-    code: 'LOCAL',
-    units: 'pixels',
-    extent: [0, 0, imgW, imgH],
-})
 
 // 渲染地图
 async function reader() {

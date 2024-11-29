@@ -10,7 +10,7 @@ import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import IconsResolver from 'unplugin-icons/resolver'
 import Icons from 'unplugin-icons/vite'
 
-// https://vite.dev/config/ 
+// https://vite.dev/config/  
 export default defineConfig({
     plugins: [
         vue(),

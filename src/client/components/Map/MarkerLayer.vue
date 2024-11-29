@@ -14,7 +14,7 @@ function position() {
     // 定位到 marker
     usemap.olMap?.getView().animate({
         center: location,
-        zoom: 5,
+        zoom: usemap.map?.tile_max_zoom || 4,
         duration: 1000,
     })
 }
@@ -44,7 +44,7 @@ function onclose() {
                 </Markdown>
                 <div v-if="usemap.markerLayerData.mark_links && usemap.markerLayerData.mark_links.length > 0">
                     <v-chip variant="text" label color="#1890ff" v-for="link in usemap.markerLayerData.mark_links"
-                        :href="link.url" target="_blank">{{ link.label }}</v-chip>
+                        :href="link.url" target="_blank" append-icon="mdi-link-variant">{{ link.label }}</v-chip>
                 </div>
                 <div v-if="usemap.markerLayerData.mark_images && usemap.markerLayerData.mark_images.length > 0">
                     <el-carousel height="150px" indicator-position="none">

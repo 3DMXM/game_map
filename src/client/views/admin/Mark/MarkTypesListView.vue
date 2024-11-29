@@ -148,6 +148,12 @@ getMapList()
                 </template>
             </el-table-column>
             <el-table-column prop="mark_type_name" label="名称" />
+            <el-table-column prop="mark_type_scale" label="缩放">
+                <template #default="{ row }">
+                    <!-- <el-input v-model="row.mark_type_scale" type="number"></el-input> -->
+                    <el-input-number v-model="row.mark_type_scale" :step="0.1" @change="change(row)" />
+                </template>
+            </el-table-column>
             <el-table-column label="操作">
                 <template #default="{ row }">
                     <el-button link type="primary" @click="edit(row)">编辑

@@ -1,0 +1,6 @@
+[
+{
+  "directory": "e:\\3dm\\H5\\game_map\\scripts\\slice",
+  "arguments": ["C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.42.34433\\bin\\HostX64\\x64\\cl.exe", "/c", "/nologo", "/O2", "/std:c++20", "/IC:\\Users\\xiaom\\AppData\\Local\\Programs\\opencv\\opencv\\build\\include", "/EHsc", "/IC:\\Users\\xiaom\\AppData\\Local\\.xmake\\packages\\i\\inih\\58\\cf17637f93c8421699dbbf4f80fef9c9\\include", "/DNDEBUG", "/Fobuild\\.objs\\slice\\windows\\x64\\release\\src\\main.cpp.obj", "src\\main.cpp", "-imsvc", "C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.26100.0\\cppwinrt", "-imsvc", "C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.26100.0\\shared", "-imsvc", "C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.26100.0\\ucrt", "-imsvc", "C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.26100.0\\um", "-imsvc", "C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.26100.0\\winrt", "-imsvc", "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.42.34433\\include"],
+  "file": "src\\main.cpp"
+}]

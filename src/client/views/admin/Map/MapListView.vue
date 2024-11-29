@@ -7,7 +7,9 @@ type formType = IMap
 
 const tableData = ref<formType[]>([])
 const shewDialog = ref(false)
-const form = ref<formType>({} as formType)
+const form = ref<formType>({
+    map_view_offset: [0, 0, 0, 0]
+} as formType)
 
 const gameList = ref<IGame[]>([])
 const tileList = ref<ITile[]>([])
@@ -67,7 +69,9 @@ function del(id: number) {
 }
 
 function clear() {
-    form.value = {} as formType
+    form.value = {
+        map_view_offset: [0, 0, 0, 0]
+    } as formType
 }
 
 gettableData()
@@ -98,8 +102,6 @@ getTileList()
                     </el-link>
                 </template>
             </el-table-column>
-            <el-table-column prop="map_width" label="宽度" width="100" />
-            <el-table-column prop="map_height" label="高度" width="100" />
             <el-table-column label="操作">
                 <template #default="{ row }">
                     <el-button link type="primary" @click="edit(row)">编辑
@@ -133,6 +135,22 @@ getTileList()
                         <el-option v-for="item in tileList" :key="item.id" :value="item.id"
                             :label="item.tile_name"></el-option>
                     </el-select>
+                </el-form-item>
+                <el-form-item label="视野偏移">
+                    <el-row :gutter="20">
+                        <el-col :span="6">
+                            <el-input v-model.number="form.map_view_offset[0]" placeholder="左" type="number"></el-input>
+                        </el-col>
+                        <el-col :span="6">
+                            <el-input v-model.number="form.map_view_offset[1]" placeholder="下" type="number"></el-input>
+                        </el-col>
+                        <el-col :span="6">
+                            <el-input v-model.number="form.map_view_offset[2]" placeholder="右" type="number"></el-input>
+                        </el-col>
+                        <el-col :span="6">
+                            <el-input v-model.number="form.map_view_offset[3]" placeholder="上" type="number"></el-input>
+                        </el-col>
+                    </el-row>
                 </el-form-item>
                 <el-form-item label="SEO路径">
                     <el-input v-model="form.map_path" placeholder="自定义SEO路径"></el-input>

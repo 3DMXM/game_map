@@ -3,6 +3,7 @@
 
 </script>
 <template>
+    <BaseLeftMenu></BaseLeftMenu>
     <game-map></game-map>
 </template>
 <script lang='ts'>

@@ -9,6 +9,7 @@ const router = express.Router();
 router.post("/getMapByPath", async (req, res) => {
     const { path } = req.body;
     const map = await SQLite.get('SELECT * FROM maps WHERE map_path = ?', [path])
+    map.map_view_offset = JSON.parse(map.map_view_offset)
     res.json({ code: 0, data: map });
 })
 

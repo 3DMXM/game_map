@@ -24,8 +24,9 @@ dist-ssr
 *.sw?
 
 .venv
-public/map/*
 public/uploads/*
 
-scripts/out/*
+out
 files/*
+.xmake
+build
