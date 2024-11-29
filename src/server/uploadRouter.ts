@@ -96,11 +96,11 @@ router.post("/tiles", upload.single('file'), async (req, res) => {
     // 删除 zipPath 文件
     fs.unlinkSync(zipPath);
 
+    let data = { tile_path: `/uploads/tiles/${req.file.filename}/{z}/tile_{x}_{y}.webp`, tile_min_zoom, tile_max_zoom }
+    console.log(data);
+
     res.json({
-        code: 0, data: {
-            tile_path: `/uploads/tiles/${req.file.filename}/{z}/tile_{x}_{y}.webp`,
-            tile_min_zoom, tile_max_zoom
-        }
+        code: 0, data
     })
 
 

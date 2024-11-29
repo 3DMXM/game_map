@@ -30,3 +30,5 @@ out
 files/*
 .xmake
 build
+
+data.db
