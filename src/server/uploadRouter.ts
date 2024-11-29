@@ -6,12 +6,12 @@ import { Unzip } from './Unzip'
 
 const router = express.Router();
 
-let basePath = 'public/uploads/'
+let basePath = 'public/uploads'
 // 如果是生产环境，修改 basePath 为 dist/uploads/
 console.log("env:", process.env.NODE_ENV);
 
 if (process.env.NODE_ENV === 'production') {
-    basePath = 'dist/uploads/'
+    basePath = 'dist/uploads'
 }
 
 
@@ -65,9 +65,8 @@ router.post("/images", upload.single('image'), async (req, res) => {
     fs.renameSync(`files/${req.file.filename}`, `${path}${randomString}${extname(req.file.originalname)}`)
 
     path = path.replace('public', '')
+    path = path.replace('dist', '')
     res.json({ code: 0, data: `${path}${randomString}${extname(req.file.originalname)}` })
-
-
 });
 
 router.post("/tiles", upload.single('file'), async (req, res) => {
