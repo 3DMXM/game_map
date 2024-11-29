@@ -6,6 +6,15 @@ import { Unzip } from './Unzip'
 
 const router = express.Router();
 
+let basePath = 'public/uploads/'
+// 如果是生产环境，修改 basePath 为 dist/uploads/
+console.log("env:", process.env.NODE_ENV);
+
+if (process.env.NODE_ENV === 'production') {
+    basePath = 'dist/uploads/'
+}
+
+
 // 递归创建缺少的目录
 async function createDirectories(path: string) {
     // 判断路径是否存在，不存在则递归创建
@@ -43,7 +52,7 @@ router.post("/images", upload.single('image'), async (req, res) => {
         return res.json({ code: 404, msg: '请上传文件' })
     }
 
-    let path = `public/uploads/images/`
+    let path = `${basePath}/images/`
     // 路径后面添加 年/月/日
     let date = new Date();
     path += `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}/`
@@ -68,10 +77,10 @@ router.post("/tiles", upload.single('file'), async (req, res) => {
 
     // 解压文件
     const zipPath = `files/${req.file.filename}`
-    const destPath = `public/uploads/tiles/${req.file.filename.split('.')[0]}`
+    const destPath = `${basePath}/tiles/${req.file.filename.split('.')[0]}`
     await Unzip.unzip(zipPath, destPath)
 
-    let path = `public/uploads/tiles/${req.file.filename.split('.')[0]}/`
+    let path = `${basePath}/tiles/${req.file.filename.split('.')[0]}/`
     // 递归获取 path 文件夹下的所有文件的列表
     let files = getFiles(path)
     // console.log(files);
