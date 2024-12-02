@@ -19,6 +19,35 @@ router.post('/login', async (req, res) => {
     }
 });
 
+//#region 用户相关
+router.post('/getUserList', async (req, res) => {
+    let users = await SQLite.all('SELECT * FROM users')
+    res.json({ code: 0, data: users })
+})
+
+// 修改密码
+router.post('/saveUser', async (req, res) => {
+
+    const { id, oldpassword, newpassword } = req.body;
+
+    // 校验旧密码是否正确
+    let user = await SQLite.get('SELECT * FROM users WHERE id = ? AND password = ?', [id, md5(oldpassword)])
+    if (!user) {
+        res.json({ code: 401, msg: '密码错误' })
+        return;
+    }
+
+    // 修改密码
+    await SQLite.run('UPDATE users SET password = ? WHERE id = ?', [md5(newpassword), id])
+
+    res.json({ code: 0, msg: '修改成功' })
+
+})
+
+
+//#endregion
+
+
 //#region 游戏相关
 
 router.post('/getGameList', async (req, res) => {
@@ -169,6 +198,16 @@ router.post("/saveMarks", async (req, res) => {
         await SQLite.run('INSERT INTO marks (mark_type, mark_name, mark_position_x, mark_position_y, mark_des, mark_links, mark_images) VALUES (?, ?, ?, ?, ?, ?, ?)', [mark_type, mark_name, mark_position_x, mark_position_y, mark_des, mark_links, mark_images])
     }
     res.json({ code: 0 })
+})
+
+router.post("/delMarks", async (req, res) => {
+    const { id } = req.body;
+    const statement = await SQLite.run('DELETE FROM marks WHERE id = ?', [id])
+    if (statement.changes && statement.changes > 0) {
+        res.json({ code: 0, msg: '删除成功' })
+    } else {
+        res.json({ code: 401, msg: '删除失败' })
+    }
 })
 
 //#endregion

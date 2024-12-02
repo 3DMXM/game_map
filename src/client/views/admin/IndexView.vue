@@ -7,6 +7,16 @@ let links = [
         icon: 'mdi-home'
     },
     {
+        name: '用户',
+        icon: 'mdi-account',
+        children: [
+            {
+                name: '用户列表',
+                to: '/admin/userlist'
+            }
+        ]
+    },
+    {
         name: '游戏',
         icon: 'mdi-gamepad-variant',
         children: [
@@ -65,7 +75,6 @@ let links = [
                     </v-list-group>
                     <v-list-item v-else :title="item.name" :prepend-icon="item.icon" :to="item.to"></v-list-item>
                 </template>
-
             </v-list>
         </v-navigation-drawer>
         <v-main>

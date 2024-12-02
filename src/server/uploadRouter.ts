@@ -3,6 +3,7 @@ import multer from 'multer';
 import fs from 'fs'
 import { extname } from 'path'
 import { Unzip } from './Unzip'
+import sharp from 'sharp';
 
 const router = express.Router();
 
@@ -59,14 +60,29 @@ router.post("/images", upload.single('image'), async (req, res) => {
 
     await createDirectories(path)
 
+    const ext = extname(req.file.originalname); // 后缀名
     const randomString = Math.random().toString(36).substring(2, 15);
+    const webpFilename = `${randomString}.webp`;
+    const isGif = req.file.mimetype === 'image/gif';
 
-    // 重命名文件
-    fs.renameSync(`files/${req.file.filename}`, `${path}${randomString}${extname(req.file.originalname)}`)
+    const filename = isGif ? `${randomString}.${ext}` : `${randomString}.webp`;
+
+    if (isGif) {
+        fs.renameSync(req.file.path, `${path}${filename}`);
+    } else {
+        // 将文件转换为 WebP 格式并保存
+        await sharp(req.file.path)
+            .webp()
+            .toFile(`${path}${webpFilename}`);
+
+        // // 删除原始文件
+        fs.unlinkSync(req.file.path);
+    }
+
 
     path = path.replace('public', '')
     path = path.replace('dist', '')
-    res.json({ code: 0, data: `${path}${randomString}${extname(req.file.originalname)}` })
+    res.json({ code: 0, data: `${path}${filename}` })
 });
 
 router.post("/tiles", upload.single('file'), async (req, res) => {

@@ -1,9 +1,11 @@
 <script lang='ts' setup>
 import { useMap } from '@/stores/useMap';
-
-
 import Markdown from '@/components/Model/Markdown.vue'
+import Cookies from 'js-cookie'
+import axios from 'axios';
+import { ElMessage } from 'element-plus';
 
+const user = Cookies.get('user')
 const usemap = useMap()
 
 function position() {
@@ -21,6 +23,18 @@ function position() {
 
 function onclose() {
     usemap.markerLayerData = {} as any
+}
+
+function delMarker() {
+    axios.post('/admin/delMarks', { id: usemap.markerLayerData.id }).then(({ data }) => {
+        if (data.code == 0) {
+            ElMessage.success("删除成功")
+            onclose()
+            usemap.addMaker()
+        } else {
+            ElMessage.error(data.msg)
+        }
+    })
 }
 
 </script>
@@ -49,7 +63,7 @@ function onclose() {
                 <div v-if="usemap.markerLayerData.mark_images && usemap.markerLayerData.mark_images.length > 0">
                     <el-carousel height="150px" indicator-position="none">
                         <el-carousel-item v-for="(image, index) in usemap.markerLayerData.mark_images" :key="index">
-                            <el-image class="tooltip-img" :src="image"
+                            <el-image class="tooltip-img" :src="image" lazy
                                 :preview-src-list="usemap.markerLayerData.mark_images" :initial-index="index"
                                 preview-teleported :alt="usemap.markerLayerData.mark_name" />
                         </el-carousel-item>
@@ -72,12 +86,21 @@ function onclose() {
                         <el-button link><v-icon>mdi-link-variant</v-icon></el-button> -->
                     </div>
                     <div class="right">
-                        <AddMarker>
-                            <template #operate="{ onShow }">
-                                <v-btn variant="text" @click="onShow(usemap.markerLayerData)"
-                                    append-icon="mdi-square-edit-outline">编辑</v-btn>
-                            </template>
-                        </AddMarker>
+                        <template v-if="user">
+                            <AddMarker>
+                                <template #operate="{ onShow }">
+                                    <v-btn variant="text" @click="onShow(usemap.markerLayerData)"
+                                        append-icon="mdi-square-edit-outline">编辑</v-btn>
+                                </template>
+                            </AddMarker>
+                            <el-popconfirm :title="`是否要删除『${usemap.markerLayerData.mark_name}』?`"
+                                @confirm="delMarker()">
+                                <template #reference>
+                                    <v-btn variant="text" color="red" append-icon="mdi-trash-can-outline">删除</v-btn>
+                                </template>
+                            </el-popconfirm>
+                        </template>
+
                         <!-- <v-btn variant="text">标记</v-btn> -->
                     </div>
                 </div>

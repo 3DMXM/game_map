@@ -32,5 +32,6 @@ export default {
 .markdown-body {
     background-color: transparent;
     min-height: auto;
+    color: rgba(var(--v-theme-on-background), var(--v-high-emphasis-opacity));
 }
 </style>

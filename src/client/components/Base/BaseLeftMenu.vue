@@ -2,12 +2,27 @@
 import { useMap } from '@/stores/useMap';
 import type { IMapMarksType, IMarksType } from '@/ts/Interfaces';
 import axios from 'axios';
+import { useTheme } from 'vuetify'
 
 
 const usemap = useMap()
 const router = useRouter()
 
 const unshowMarks = ref([] as number[])
+const theme = useTheme()
+
+const themeSwitch = computed(() => {
+    return theme.global.current.value.dark
+})
+
+function toggleTheme() {
+    theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark'
+    // html 标签添加 class
+    console.log(theme.global.name.value);
+
+    document.documentElement.className = theme.global.name.value
+}
+
 
 const drawer = ref(null)
 const selectMap = computed({
@@ -99,10 +114,20 @@ getMapList()
         <v-sheet class="pa-4">
             <h1>游戏攻略地图 <el-button link @click="drawer = !drawer"><v-icon>mdi-chevron-double-left</v-icon>收起</el-button>
             </h1>
+            <v-row>
+                <v-col cols="12">
+                    <el-form label-width="70">
+                        <el-form-item label="主题">
+                            <el-switch v-model="themeSwitch" @change="toggleTheme" inline-prompt active-text="暗色"
+                                inactive-text="亮色" />
+                        </el-form-item>
+                    </el-form>
+                </v-col>
+            </v-row>
         </v-sheet>
         <v-card title="切换地图">
             <v-card-text>
-                <el-cascader v-model="selectMap" :options="changeMapList" :props="props" filterable></el-cascader>
+                <el-cascader v-model="selectMap" :options="changeMapList" :props="props"></el-cascader>
             </v-card-text>
         </v-card>
         <v-card title="标记点">

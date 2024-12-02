@@ -23,6 +23,13 @@ export interface ISeriesLink {
     url: string;
 }
 
+export interface IUser {
+    id: number
+    username: string
+    password: string
+    email: string
+}
+
 export interface IGame {
     id: number
     game_name: string
