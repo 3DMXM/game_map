@@ -1,1 +1,1 @@
-## 使用 [olMap](https://olmap.org/) 实现的地图
+### 使用 mapbox-gl 实现的地图

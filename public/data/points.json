@@ -1,0 +1,73 @@
+[
+    {
+        "type": "points",
+        "coordinates": [
+            4,
+            -18
+        ],
+        "title": "点 1",
+        "images": [
+            "https://map.aoe.top/uploads/images/2024/12/3/jx9mb4bs4g.webp",
+            "https://map.aoe.top/uploads/images/2024/12/3/smu5fbt577.webp"
+        ],
+        "description": "来变异区之前，我为了好玩去打过靶，靶子都摆脸前了还是打不中。但是用这把武器就特别简单。好像突然就变成枪神了。",
+        "links": [
+            {
+                "title": "记者的储藏点",
+                "url": "https://www.3dmgame.com/gl/3953193_12.html"
+            },
+            {
+                "title": "藏起来的细软",
+                "url": "https://www.3dmgame.com/gl/3953193_11.html"
+            }
+        ]
+    },
+    {
+        "type": "points",
+        "coordinates": [
+            70,
+            30
+        ],
+        "title": "点 2",
+        "description": "这是第二个点的详细信息"
+    },
+    {
+        "type": "points",
+        "coordinates": [
+            80,
+            40
+        ],
+        "title": "点 3",
+        "description": "这是第三个点的详细信息"
+    },
+    {
+        "type": "buffer",
+        "coordinates": [
+            -12,
+            -2
+        ],
+        "radius": 300,
+        "title": "范围点 1",
+        "description": "这是范围点 1 的详细信息"
+    },
+    {
+        "type": "buffer",
+        "coordinates": [
+            45,
+            0
+        ],
+        "radius": 300,
+        "title": "范围点 2",
+        "description": "这是范围点 2 的详细信息"
+    },
+    {
+        "type": "buffer",
+        "coordinates": [
+            -45,
+            6
+        ],
+        "radius": 300,
+        "title": "范围点 3",
+        "description": "这是范围点 3 的详细信息"
+    }
+]

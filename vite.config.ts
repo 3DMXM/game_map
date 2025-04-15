@@ -10,29 +10,50 @@ import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import IconsResolver from 'unplugin-icons/resolver'
 import Icons from 'unplugin-icons/vite'
 
-// https://vite.dev/config/  
+import VueRouter from 'unplugin-vue-router/vite'
+import Layouts from 'vite-plugin-vue-layouts';
+
+import vuetify from 'vite-plugin-vuetify'
+
+// https://vite.dev/config/
 export default defineConfig({
     plugins: [
+        VueRouter(),
+        Layouts({
+            layoutsDirs: 'src/layouts', // 指定布局文件的目录路径
+            defaultLayout: 'default' // 指定默认布局文件的名称
+        }),
         vue(),
+        vuetify(),
         vueDevTools(),
         AutoImport({
-            imports: ['vue', 'vue-router'],
+            imports: [
+                'vue', 'vue-router', 'pinia',
+                { axios: [['default', 'axios']] }
+            ],
             resolvers: [
                 ElementPlusResolver(),
                 // 自动导入图标组件
                 IconsResolver({
                     prefix: 'Icon',
                 }),
+
             ],
+            dirs: ['src/model', 'src/stores'],
         }),
         Components({
-            dirs: ['src/client/components'],
             resolvers: [
                 ElementPlusResolver(),
                 // 自动注册图标组件
                 IconsResolver({
                     enabledCollections: ['ep'],
                 }),
+                (name) => {
+                    if (name.startsWith('Mb')) {
+                        return { name, from: '@mapbox-vue3/core/es' };
+                    }
+                    return null;
+                }
             ],
         }),
         Icons({
@@ -41,8 +62,16 @@ export default defineConfig({
     ],
     resolve: {
         alias: {
-            '@': fileURLToPath(new URL('./src/client', import.meta.url)),
-            '@srv': fileURLToPath(new URL('./src/server', import.meta.url)),
+            '@': fileURLToPath(new URL('./src', import.meta.url))
+        },
+    },
+    server: {
+        "proxy": {
+            "/tiles": {
+                target: "https://tiles.mapgenie.io",
+                changeOrigin: true,
+                rewrite: (path) => path.replace(/^\/tiles/, ''),
+            }
         }
     }
 })
