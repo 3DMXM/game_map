@@ -32,3 +32,6 @@ files/*
 build
 
 data.db
+
+scripts/imgs
+*.zip
