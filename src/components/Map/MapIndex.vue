@@ -1,25 +1,23 @@
 <script lang='ts' setup>
 // import 'mapbox-gl/dist/mapbox-gl.css';
-import mapboxgl from 'mapbox-gl';
+import mapboxgl from '@glossmod/mapbox-gl';
 import MarkerLayer from '@/components/Map/MarkerLayer.vue';
 
 const main = useMain()
 
+const gamemapStores = useGamemap()
+
 const mapContainer = ref();
 const LayerRef = ref();
-const pointData = ref({
-    title: "",
-    description: "",
-} as IGameMapPoint)
+const pointData = ref({} as IGameMapPoint)
 
-let gmap: GameMap
-
+let gmap = ref<GameMap>()
 
 
 async function initMap() {
-    const { data } = await axios.get('/data/points.json')
+    // const { data } = await axios.get('/data/points.json')
 
-    gmap = new GameMap({
+    gmap.value = new GameMap({
         container: mapContainer.value,
         tiles: '/uploads/tiles/91f38eb84ede4ad9809b3fe5906106ce/{z}/tile_{x}_{y}.webp',
         tileSize: 512,
@@ -29,16 +27,12 @@ async function initMap() {
         zoom: 2
     })
 
-    gmap.mapboxgl.loadImage('/images/Point.png', (error, image) => {
-        if (error) throw error;
-        if (image) {
+    window.$gmap = gmap.value;
 
-            // 将图片添加到地图
-            gmap.mapboxgl.addImage('custom-icon', image);
+    const data = await gamemapStores.getMarksData()
 
-            gmap.addPoints(data)
-        }
-    })
+    // let ids = gmap.addPoints(data)
+
 
     const popup = new mapboxgl.Popup({
         closeButton: false,
@@ -47,54 +41,56 @@ async function initMap() {
         className: 'map-popup',
     });
 
-    gmap.mapboxgl.on('click', ['points', 'circles'], async (e) => {
-        if (e.features) {
-            const properties = e.features[0].properties;
+    gamemapStores.pointsIds = await gmap.value.initGameMap(data, popup, LayerRef.value, pointData.value)
 
-            // 添加安全解析函数
-            const safeJsonParse = (jsonStr: string | undefined | null, defaultValue: any = []) => {
-                if (!jsonStr) return defaultValue;
-                try {
-                    return JSON.parse(jsonStr);
-                } catch (e) {
-                    console.warn('JSON解析错误:', e);
-                    return defaultValue;
-                }
-            };
+    // gmap.mbgl.on('click', ids, async (e) => {
+    //     if (e.features) {
+    //         const properties = e.features[0].properties;
 
-            // 优化属性赋值
-            pointData.value = {
-                ...properties,
-                images: safeJsonParse(properties?.images),
-                links: safeJsonParse(properties?.links),
-                coordinates: safeJsonParse(properties?.coordinates, [0, 0])
-            } as IGameMapPoint;
+    //         // 添加安全解析函数
+    //         const safeJsonParse = (jsonStr: string | undefined | null, defaultValue: any = []) => {
+    //             if (!jsonStr) return defaultValue;
+    //             try {
+    //                 return JSON.parse(jsonStr);
+    //             } catch (e) {
+    //                 console.warn('JSON解析错误:', e);
+    //                 return defaultValue;
+    //             }
+    //         };
 
-            console.log(pointData.value);
+    //         // 优化属性赋值
+    //         pointData.value = {
+    //             ...properties,
+    //             mark_images: safeJsonParse(properties?.mark_images),
+    //             mark_links: safeJsonParse(properties?.mark_links),
+    //             mark_position: safeJsonParse(properties?.mark_position, [0, 0])
+    //         } as IGameMapPoint;
 
-            popup
-                .setLngLat(pointData.value.coordinates)
-                .setDOMContent(LayerRef.value)
-                .addTo(gmap.mapboxgl);
+    //         console.log(pointData.value);
 
-        }
+    //         popup
+    //             .setLngLat(pointData.value.mark_position)
+    //             .setDOMContent(LayerRef.value)
+    //             .addTo(gmap.mbgl);
 
-    });
+    //     }
 
-    gmap.mapboxgl.on('mouseenter', ['points', 'circles'], () => {
-        gmap.mapboxgl.getCanvas().style.cursor = 'pointer';
-    });
+    // });
 
-    gmap.mapboxgl.on('mouseleave', ['points', 'circles'], () => {
-        gmap.mapboxgl.getCanvas().style.cursor = '';
-    });
+    // gmap.mbgl.on('mouseenter', ids, () => {
+    //     gmap.mbgl.getCanvas().style.cursor = 'pointer';
+    // });
+
+    // gmap.mbgl.on('mouseleave', ids, () => {
+    //     gmap.mbgl.getCanvas().style.cursor = '';
+    // });
 
 }
 
 
 watch(() => main.drawer, () => {
     setTimeout(() => {
-        gmap.mapboxgl.resize();
+        gmap.value?.mbgl.resize();
         // console.log('地图大小已重新调整');
     }, 200);
 })
@@ -109,7 +105,7 @@ onMounted(() => {
 <template>
     <div ref="mapContainer" class="map-container"></div>
     <div class="layer" ref="LayerRef">
-        <MarkerLayer :point="pointData" :gmap="gmap"></MarkerLayer>
+        <MarkerLayer :point="pointData"></MarkerLayer>
     </div>
 </template>
 <script lang='ts'>

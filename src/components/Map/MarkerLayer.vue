@@ -1,10 +1,9 @@
 <script lang='ts' setup>
-import type { LngLatLike } from 'mapbox-gl';
+// import type { LngLatLike } from '@glossmod/mapbox-gl';
 
 
 const props = defineProps<{
     point: IGameMapPoint
-    gmap: GameMap
 }>()
 
 
@@ -19,14 +18,14 @@ function onclose() {
 }
 
 function position() {
-    const { gmap, point } = props
+    const { point } = props
 
-    let coordinates = point.coordinates
+    let mark_position = point.mark_position
 
+    // console.log(mark_position);
 
-    console.log(coordinates);
-    gmap.mapboxgl.flyTo({
-        center: coordinates,
+    window.$gmap?.mbgl.flyTo({
+        center: mark_position,
         zoom: 4,
     })
 }
@@ -36,7 +35,7 @@ function position() {
     <v-card class="card" width="376px">
         <v-card-title>
             <div class="tooltip-header">
-                <h3>{{ point.title }}
+                <h3>{{ point.mark_name }}
                     <el-button link @click="position"><v-icon size="20">mdi-map-marker-outline</v-icon></el-button>
                 </h3>
                 <el-button link @click="onclose">
@@ -46,18 +45,18 @@ function position() {
         </v-card-title>
         <v-card-text>
 
-            <div v-if="point.images && point.images.length > 0">
+            <div v-if="point.mark_images && point.mark_images.length > 0">
                 <el-carousel height="150px" indicator-position="none">
-                    <el-carousel-item v-for="(image, index) in point.images" :key="index">
-                        <el-image class="tooltip-img" :src="image" lazy :preview-src-list="point.images"
-                            :initial-index="index" preview-teleported :alt="point.title" />
+                    <el-carousel-item v-for="(image, index) in point.mark_images" :key="index">
+                        <el-image class="tooltip-img" :src="image" lazy :preview-src-list="point.mark_images"
+                            :initial-index="index" preview-teleported :alt="point.mark_name" />
                     </el-carousel-item>
                 </el-carousel>
             </div>
-            <Markdown class="description" :md="point.description"></Markdown>
-            <div v-if="point.links && point.links.length > 0">
-                <v-chip variant="text" label color="#1890ff" v-for="link in point.links" :href="link.url"
-                    target="_blank" append-icon="mdi-link-variant">{{ link.title }}</v-chip>
+            <Markdown class="description" :md="point.mark_des || ''"></Markdown>
+            <div v-if="point.mark_links && point.mark_links.length > 0">
+                <v-chip variant="text" label color="#1890ff" v-for="link in point.mark_links" :href="link.url"
+                    target="_blank" append-icon="mdi-link-variant">{{ link.label }}</v-chip>
             </div>
         </v-card-text>
     </v-card>

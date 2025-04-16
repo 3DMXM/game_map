@@ -1,73 +1,287 @@
 [
     {
-        "type": "points",
-        "coordinates": [
-            4,
-            -18
-        ],
-        "title": "点 1",
-        "images": [
-            "https://map.aoe.top/uploads/images/2024/12/3/jx9mb4bs4g.webp",
-            "https://map.aoe.top/uploads/images/2024/12/3/smu5fbt577.webp"
-        ],
-        "description": "来变异区之前，我为了好玩去打过靶，靶子都摆脸前了还是打不中。但是用这把武器就特别简单。好像突然就变成枪神了。",
-        "links": [
+        "id": 1,
+        "mark_type_name": "任务地点",
+        "mark_type_parent": "主要地点",
+        "mark_type_icon": "/images/point.png",
+        "mark_type_scale": 0.3,
+        "marks": [
             {
-                "title": "记者的储藏点",
-                "url": "https://www.3dmgame.com/gl/3953193_12.html"
+                "id": 1,
+                "mark_type": "points",
+                "mark_name": "记者的储藏点",
+                "mark_position": [
+                    4,
+                    -18
+                ],
+                "mark_des": "来变异区之前，我为了好玩去打过靶，靶子都摆脸前了还是打不中。但是用这把武器就特别简单。好像突然就变成枪神了。",
+                "mark_links": [
+                    {
+                        "label": "记者的储藏点",
+                        "url": "https://www.3dmgame.com/gl/3953193_12.html"
+                    },
+                    {
+                        "label": "藏起来的细软",
+                        "url": "https://www.3dmgame.com/gl/3953193_11.html"
+                    }
+                ],
+                "mark_images": [
+                    "https://mod.3dmgame.com/static/upload/mod/202504/MOD67ff7a12488af.webp@webp",
+                    "https://mod.3dmgame.com/static/upload/mod/202504/MOD67ff7a2748d35.png@webp"
+                ]
             },
             {
-                "title": "藏起来的细软",
-                "url": "https://www.3dmgame.com/gl/3953193_11.html"
+                "id": 2,
+                "mark_type": "points",
+                "mark_name": "补给点",
+                "mark_position": [
+                    70,
+                    30
+                ],
+                "mark_des": "这是第二个点的详细信息。这里有一些必要的补给品，包括医疗包和弹药。",
+                "mark_links": null,
+                "mark_images": null
+            },
+            {
+                "id": 3,
+                "mark_type": "points",
+                "mark_name": "安全屋",
+                "mark_position": [
+                    80,
+                    40
+                ],
+                "mark_des": "这是第三个点的详细信息。这里是一个临时安全屋，可以避开敌人的追捕。",
+                "mark_links": null,
+                "mark_images": null
+            },
+            {
+                "id": 9,
+                "mark_type": "points",
+                "mark_name": "通讯基站",
+                "mark_position": [
+                    60,
+                    -25
+                ],
+                "mark_des": "这个基站可以恢复区域内的通信网络，完成相关任务后可启用。",
+                "mark_links": [
+                    {
+                        "label": "通讯网络修复指南",
+                        "url": "https://www.3dmgame.com/gl/network_repair.html"
+                    }
+                ],
+                "mark_images": [
+                    "https://mod.3dmgame.com/static/upload/mod/202504/MOD67ff7a8a12345.webp@webp"
+                ]
+            },
+            {
+                "id": 10,
+                "mark_type": "points",
+                "mark_name": "废弃实验室",
+                "mark_position": [
+                    -35,
+                    30
+                ],
+                "mark_des": "这个实验室藏有重要的研究数据，但是被变异生物占据了，需要清理后才能进入。",
+                "mark_links": null,
+                "mark_images": [
+                    "https://mod.3dmgame.com/static/upload/mod/202504/MOD67ff7a9b67890.webp@webp"
+                ]
             }
         ]
     },
     {
-        "type": "points",
-        "coordinates": [
-            70,
-            30
-        ],
-        "title": "点 2",
-        "description": "这是第二个点的详细信息"
+        "id": 2,
+        "mark_type_name": "危险区域",
+        "mark_type_parent": "特殊地点",
+        "mark_type_icon": "/images/danger.png",
+        "mark_type_scale": 0.4,
+        "marks": [
+            {
+                "id": 4,
+                "mark_type": "buffer",
+                "mark_name": "辐射区",
+                "mark_position": [
+                    -12,
+                    -2
+                ],
+                "mark_des": "这是一个大范围辐射区，需要防护装备才能安全通过。范围约300米。",
+                "mark_links": [
+                    {
+                        "label": "辐射防护指南",
+                        "url": "https://www.3dmgame.com/gl/radiation_guide.html"
+                    }
+                ],
+                "mark_images": [
+                    "https://mod.3dmgame.com/static/upload/mod/202504/MOD67ff7a3bd37dc.webp@webp"
+                ],
+                "mark_radius": 300,
+                "fillColor": "rgba(255, 0, 0, 0.5)",
+                "fillOpacity": 0.5
+            },
+            {
+                "id": 5,
+                "mark_type": "buffer",
+                "mark_name": "雾区",
+                "mark_position": [
+                    45,
+                    0
+                ],
+                "mark_des": "这片区域被奇怪的雾气笼罩，能见度极低。进入时请小心前进。范围约300米。",
+                "mark_links": null,
+                "mark_images": [
+                    "https://mod.3dmgame.com/static/upload/mod/202504/MOD67ff7a4e3b5ba.png@webp"
+                ],
+                "mark_radius": 300,
+                "fillColor": "rgba(0, 0, 255, 0.5)",
+                "fillOutlineColor": "rgba(0, 0, 255, 1)"
+            },
+            {
+                "id": 6,
+                "mark_type": "buffer",
+                "mark_name": "化学污染区",
+                "mark_position": [
+                    -43,
+                    -5
+                ],
+                "mark_des": "有毒化学物质泄漏的区域，需要防毒面具才能通过。范围约700米。",
+                "mark_links": [
+                    {
+                        "label": "化学防护装备位置",
+                        "url": "https://www.3dmgame.com/gl/chem_equipment.html"
+                    }
+                ],
+                "mark_images": [
+                    "https://mod.3dmgame.com/static/upload/mod/202504/MOD67ff7a5cc3e00.webp@webp"
+                ],
+                "mark_radius": 700
+            },
+            {
+                "id": 11,
+                "mark_type": "buffer",
+                "mark_name": "高温熔岩区",
+                "mark_position": [
+                    -20,
+                    70
+                ],
+                "mark_des": "地壳变动导致的高温区域，没有特殊防护装备会持续受到伤害。范围约500米。",
+                "mark_links": [
+                    {
+                        "label": "耐热装备获取攻略",
+                        "url": "https://www.3dmgame.com/gl/heat_resist_guide.html"
+                    }
+                ],
+                "mark_images": [
+                    "https://mod.3dmgame.com/static/upload/mod/202504/MOD67ff7a7c39153.webp@webp"
+                ],
+                "mark_radius": 500,
+                "fillColor": "rgba(255, 165, 0, 0.5)",
+                "fillOutlineColor": "rgba(255, 165, 0, 1)",
+                "fillOpacity": 0.7
+            }
+        ]
     },
     {
-        "type": "points",
-        "coordinates": [
-            80,
-            40
-        ],
-        "title": "点 3",
-        "description": "这是第三个点的详细信息"
+        "id": 3,
+        "mark_type_name": "资源点",
+        "mark_type_parent": "收集道具",
+        "mark_type_icon": "/images/resource.png",
+        "mark_type_scale": 0.3,
+        "marks": [
+            {
+                "id": 7,
+                "mark_type": "points",
+                "mark_name": "矿物采集点",
+                "mark_position": [
+                    120,
+                    65
+                ],
+                "mark_des": "这里有丰富的矿物资源，可以采集用于合成或升级装备。",
+                "mark_links": null,
+                "mark_images": [
+                    "https://mod.3dmgame.com/static/upload/mod/202504/MOD67ff7a6a73967.webp@webp"
+                ]
+            },
+            {
+                "id": 8,
+                "mark_type": "points",
+                "mark_name": "植物采集点",
+                "mark_position": [
+                    -80,
+                    50
+                ],
+                "mark_des": "这里生长着多种可用于制作药剂的植物，定期刷新。",
+                "mark_links": [
+                    {
+                        "label": "药剂制作指南",
+                        "url": "https://www.3dmgame.com/gl/potion_guide.html"
+                    }
+                ],
+                "mark_images": [
+                    "https://mod.3dmgame.com/static/upload/mod/202504/MOD67ff7a7c39153.webp@webp"
+                ]
+            },
+            {
+                "id": 12,
+                "mark_type": "points",
+                "mark_name": "淡水资源点",
+                "mark_position": [
+                    15,
+                    80
+                ],
+                "mark_des": "这里有干净的饮用水，可以补充水分并用于制作其他物品。",
+                "mark_links": null,
+                "mark_images": [
+                    "https://mod.3dmgame.com/static/upload/mod/202504/MOD67ff7c3456789.webp@webp"
+                ]
+            }
+        ]
     },
     {
-        "type": "buffer",
-        "coordinates": [
-            -12,
-            -2
-        ],
-        "radius": 300,
-        "title": "范围点 1",
-        "description": "这是范围点 1 的详细信息"
-    },
-    {
-        "type": "buffer",
-        "coordinates": [
-            45,
-            0
-        ],
-        "radius": 300,
-        "title": "范围点 2",
-        "description": "这是范围点 2 的详细信息"
-    },
-    {
-        "type": "buffer",
-        "coordinates": [
-            -45,
-            6
-        ],
-        "radius": 300,
-        "title": "范围点 3",
-        "description": "这是范围点 3 的详细信息"
+        "id": 4,
+        "mark_type_name": "隐藏宝藏",
+        "mark_type_parent": "特殊地点",
+        "mark_type_icon": "/images/treasure.webp",
+        "mark_type_scale": 0.3,
+        "marks": [
+            {
+                "id": 13,
+                "mark_type": "points",
+                "mark_name": "古代宝箱",
+                "mark_position": [
+                    -60,
+                    -30
+                ],
+                "mark_des": "这个宝箱被隐藏在废墟之下，需要特殊的钥匙才能打开，内含稀有装备。",
+                "mark_links": [
+                    {
+                        "label": "宝箱钥匙位置",
+                        "url": "https://www.3dmgame.com/gl/treasure_key.html"
+                    }
+                ],
+                "mark_images": [
+                    "https://mod.3dmgame.com/static/upload/mod/202504/MOD67ff7d9876543.webp@webp"
+                ]
+            },
+            {
+                "id": 14,
+                "mark_type": "points",
+                "mark_name": "沉船遗宝",
+                "mark_position": [
+                    90,
+                    -45
+                ],
+                "mark_des": "一艘沉没的船只，船舱中藏有一些珍贵的物资和武器升级部件。需要潜水装备。",
+                "mark_links": [
+                    {
+                        "label": "潜水技巧",
+                        "url": "https://www.3dmgame.com/gl/diving_guide.html"
+                    }
+                ],
+                "mark_images": [
+                    "https://mod.3dmgame.com/static/upload/mod/202504/MOD67ff7e1357924.webp@webp",
+                    "https://mod.3dmgame.com/static/upload/mod/202504/MOD67ff7e2468035.webp@webp"
+                ]
+            }
+        ]
     }
 ]

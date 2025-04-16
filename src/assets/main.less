@@ -59,19 +59,32 @@
 }
 
 .map-popup {
-    &.mapboxgl-popup-anchor-bottom .mapboxgl-popup-tip {
-        border-top-color: rgb(var(--v-theme-background));
+
+    // 处理底部和底部角落的提示样式
+    &.mapboxgl-popup-anchor-bottom,
+    &.mapboxgl-popup-anchor-bottom-right,
+    &.mapboxgl-popup-anchor-bottom-left {
+        .mapboxgl-popup-tip {
+            border-top-color: rgb(var(--v-theme-surface));
+        }
     }
 
+    // 处理顶部和顶部角落的提示样式
+    &.mapboxgl-popup-anchor-top,
+    &.mapboxgl-popup-anchor-top-right,
+    &.mapboxgl-popup-anchor-top-left {
+        .mapboxgl-popup-tip {
+            border-bottom-color: rgb(var(--v-theme-surface));
+        }
+    }
+
+    // 处理左侧提示样式
     &.mapboxgl-popup-anchor-left .mapboxgl-popup-tip {
-        border-right-color: rgb(var(--v-theme-background));
+        border-right-color: rgb(var(--v-theme-surface));
     }
 
-    &.mapboxgl-popup-anchor-top .mapboxgl-popup-tip {
-        border-bottom-color: rgb(var(--v-theme-background));
-    }
-
+    // 处理右侧提示样式
     &.mapboxgl-popup-anchor-right .mapboxgl-popup-tip {
-        border-left-color: rgb(var(--v-theme-background));
+        border-left-color: rgb(var(--v-theme-surface));
     }
 }
