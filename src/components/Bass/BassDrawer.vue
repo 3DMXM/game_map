@@ -1,19 +1,25 @@
 <script lang='ts' setup>
 
 const main = useMain()
-
 const gamemapStores = useGamemap()
 
-// const unshowMarks = ref([] as number[])
+// 添加搜索关键字变量
+const searchKeyword = ref('')
 
 const types = computed(() => {
-
     const types = [] as { name: string, list: IGameMark[], total: number }[]
 
-    gamemapStores.marks.forEach(item => {
+    // 根据搜索关键字过滤标记点
+    const filteredMarks = searchKeyword.value
+        ? gamemapStores.marks.filter(item => item.mark_type_name.toLowerCase().includes(searchKeyword.value.toLowerCase()))
+        : gamemapStores.marks
+
+    filteredMarks.forEach(item => {
         const type = types.find(type => type.name == item.mark_type_parent)
         if (type) {
             type.list.push(item)
+            // 确保总数正确计算
+            type.total = type.list.reduce((sum, mark) => sum + mark.marks.length, 0)
         } else {
             types.push({ name: item.mark_type_parent, list: [item], total: item.marks.length })
         }
@@ -21,6 +27,12 @@ const types = computed(() => {
 
     return types
 })
+
+// 处理搜索输入变更
+function handleSearch() {
+    // 添加点位后需要重新渲染地图
+    window.$gmap?.addPoints(gamemapStores.fillterMarks, gamemapStores.pointsIds)
+}
 
 function switchMarks(mark: IGameMark) {
 
@@ -44,9 +56,7 @@ function clearAll() {
 function selectAll() {
     gamemapStores.unshowMarks = []
     window.$gmap?.addPoints(gamemapStores.fillterMarks, gamemapStores.pointsIds)
-
 }
-
 
 
 </script>
@@ -65,9 +75,9 @@ function selectAll() {
                     <el-button @click="clearAll">隐藏全部</el-button>
                 </v-col>
                 <v-col cols="12">
-                    <el-input placeholder="搜索标记点">
+                    <el-input v-model="searchKeyword" placeholder="搜索标记点" @input="handleSearch">
                         <template #append>
-                            <el-button slot="append"> <el-icon><el-icon-search></el-icon-search></el-icon> </el-button>
+                            <el-button> <el-icon><el-icon-search></el-icon-search></el-icon> </el-button>
                         </template>
                     </el-input>
                     <div class="mark" v-for="type in types">
