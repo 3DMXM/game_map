@@ -16,7 +16,7 @@ import Layouts from 'vite-plugin-vue-layouts';
 import vuetify from 'vite-plugin-vuetify'
 
 // 获取仓库名称，用于 GitHub Pages 部署
-const repository = process.env.GITHUB_REPOSITORY?.split('/')[1] || ''
+// const repository = process.env.GITHUB_REPOSITORY?.split('/')[1] || ''
 
 
 // https://vite.dev/config/
@@ -69,5 +69,5 @@ export default defineConfig({
             '@': fileURLToPath(new URL('./src', import.meta.url))
         },
     },
-    base: process.env.NODE_ENV === 'production' ? `/${repository}/` : '/',
+    // base: process.env.NODE_ENV === 'production' ? `/${repository}/` : '/',
 })
