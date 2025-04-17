@@ -8,10 +8,14 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # 明确授予写入权限
 
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v3
+        with:
+          persist-credentials: false # 避免使用 GitHub Actions 令牌
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
@@ -23,8 +27,8 @@ jobs:
 
       - name: Build
         run: yarn run build
-        # env:
-        #   BASE_URL: /game_map/ # 设置为你的仓库名
+        env:
+          BASE_URL: /game_map/ # 设置为你的仓库名
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
