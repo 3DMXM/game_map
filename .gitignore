@@ -29,5 +29,6 @@ coverage
 
 *.tsbuildinfo
 
-scripts/out
-public/map/test*
+public/uploads
+
+.env

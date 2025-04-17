@@ -1,80 +1,66 @@
 <script lang='ts' setup>
-import { useMap } from '@/stores/useMap';
+// import type { LngLatLike } from '@glossmod/mapbox-gl';
 
 
-import Markdown from '@/components/Model/Markdown.vue'
+const props = defineProps<{
+    point: IGameMapPoint
+}>()
 
-const usemap = useMap()
-
-
-function position() {
-
-    let location = [usemap.markerLayerData.value[0], usemap.markerLayerData.value[1]]
-    console.log(location);
-
-    // 定位到 marker
-    usemap.olMap?.getView().animate({
-        center: location,
-        zoom: 5,
-        duration: 1000,
-    })
-}
 
 function onclose() {
-    usemap.markerLayerData = {} as any
+    // 获取所有弹出窗口并移除
+    const popups = document.getElementsByClassName('mapboxgl-popup');
+    if (popups.length) {
+        Array.from(popups).forEach(popup => {
+            popup.remove();
+        });
+    }
+}
+
+function position() {
+    const { point } = props
+
+    let mark_position = point.mark_position
+
+    // console.log(mark_position);
+
+    window.$gmap?.mbgl.flyTo({
+        center: mark_position,
+        zoom: 4,
+    })
 }
 
 </script>
 <template>
-    <div ref="markerRef" class="layer" v-if="usemap.markerLayerData.name">
-        <v-card class="card" width="300px">
-            <v-card-title>
-                <div class="tooltip-header">
-                    <h3>{{ usemap.markerLayerData.name }}
-                        <el-button link @click="position"><v-icon size="20">mdi-map-marker-outline</v-icon></el-button>
-                    </h3>
-                    <el-button link @click="onclose">
-                        <v-icon>mdi-close</v-icon>
-                    </el-button>
-                </div>
+    <v-card class="card" width="376px">
+        <v-card-title>
+            <div class="tooltip-header">
+                <h3>{{ point.mark_name }}
+                    <el-button link @click="position"><v-icon size="20">mdi-map-marker-outline</v-icon></el-button>
+                </h3>
+                <el-button link @click="onclose">
+                    <v-icon>mdi-close</v-icon>
+                </el-button>
+            </div>
+        </v-card-title>
+        <v-card-text>
 
-            </v-card-title>
-            <v-card-text>
-                <Markdown class="tooltip-describe" v-if="usemap.markerLayerData.value[2]"
-                    :md="usemap.markerLayerData.value[2]">
-                </Markdown>
-                <div v-if="usemap.markerLayerData.value[3] && usemap.markerLayerData.value[3].length > 0">
-                    <v-chip variant="text" label color="#1890ff" v-for="item in usemap.markerLayerData.value[3]"
-                        :href="item.url" target="_blank">{{ item.name }}</v-chip>
-                </div>
-                <div v-if="usemap.markerLayerData.value[4] && usemap.markerLayerData.value[4].length > 0">
-                    <v-img class="tooltip-img" v-for="image in usemap.markerLayerData.value[4] " :src="image"
-                        :alt="usemap.markerLayerData.name" />
-                </div>
-            </v-card-text>
-            <v-card-actions>
-                <div class="footer">
-                    <div class="left">
-                        <el-button link>
-                            <el-badge color="error" value="536">
-                                <v-icon>mdi-comment-outline</v-icon>
-                            </el-badge>
-                        </el-button>
-                        <el-button link>
-                            <el-badge color="error" value="3.6k">
-                                <v-icon>mdi-thumb-up-outline</v-icon>
-                            </el-badge>
-                        </el-button>
-                        <el-button link><v-icon>mdi-link-variant</v-icon></el-button>
-                    </div>
-                    <div class="right">
-                        <v-btn variant="text">编辑</v-btn>
-                        <v-btn variant="text">标记</v-btn>
-                    </div>
-                </div>
-            </v-card-actions>
-        </v-card>
-    </div>
+            <div v-if="point.mark_images && point.mark_images.length > 0">
+                <el-carousel height="150px" indicator-position="none">
+                    <el-carousel-item v-for="(image, index) in point.mark_images" :key="index">
+                        <el-image class="tooltip-img" :src="image" lazy :preview-src-list="point.mark_images"
+                            :initial-index="index" preview-teleported :alt="point.mark_name" />
+                    </el-carousel-item>
+                </el-carousel>
+            </div>
+            <Markdown class="description" :md="point.mark_des || ''"></Markdown>
+            <div v-if="point.mark_links && point.mark_links.length > 0">
+                <v-chip variant="text" label color="#1890ff" v-for="link in point.mark_links" :href="link.url"
+                    target="_blank" append-icon="mdi-link-variant">{{ link.label }}</v-chip>
+            </div>
+        </v-card-text>
+    </v-card>
+
 </template>
 <script lang='ts'>
 
@@ -83,42 +69,26 @@ export default {
 }
 </script>
 <style lang='less' scoped>
-.layer {
-    &::before {
-        content: "";
-        position: absolute;
-        width: 0;
-        height: 0;
-        border-left: 10px solid transparent;
-        border-right: 10px solid transparent;
-        border-top: 10px solid rgb(var(--v-theme-surface));
-        bottom: -9px;
-        left: 50%;
-        margin-left: -10px;
+.card {
+    text-align: left;
+
+    .tooltip-header {
+        flex: 1 1 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
     }
 
-
-    .card {
-        text-align: left;
-
-        .tooltip-header {
-            flex: 1 1 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .tooltip-img {
-            max-width: 100%;
-        }
-
-        .footer {
-            flex: 1 1 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
+    .tooltip-img {
+        max-width: 100%;
     }
+
+    .footer {
+        flex: 1 1 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
 }
 </style>

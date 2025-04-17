@@ -1,11 +1,13 @@
-<script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
+<script lang='ts' setup>
+
 </script>
-
 <template>
-    <v-layout>
-        <RouterView />
-    </v-layout>
+    <RouterView></RouterView>
 </template>
+<script lang='ts'>
 
-<style scoped></style>
+export default {
+    name: 'App',
+}
+</script>
+<style lang='less' scoped></style>
