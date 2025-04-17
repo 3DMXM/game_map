@@ -16,8 +16,6 @@ declare module 'vue' {
     ElIconSearch: typeof import('@element-plus/icons-vue')['Search']
     ElImage: typeof import('element-plus/es')['ElImage']
     ElInput: typeof import('element-plus/es')['ElInput']
-    ElProgress: typeof import('element-plus/es')['ElProgress']
-    ElSkeleton: typeof import('element-plus/es')['ElSkeleton']
     ElSwitch: typeof import('element-plus/es')['ElSwitch']
     MapIndex: typeof import('./src/components/Map/MapIndex.vue')['default']
     MapLoading: typeof import('./src/components/Model/MapLoading.vue')['default']
