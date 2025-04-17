@@ -28,12 +28,21 @@ const types = computed(() => {
     return types
 })
 
+
+watch([() => gamemapStores.unshowMarks, () => gamemapStores.showName], () => {
+    window.$gmap?.addPoints(gamemapStores.fillterMarks, gamemapStores.showName, gamemapStores.pointsIds,)
+
+}, { deep: true })
+
+
 // 处理搜索输入变更
 function handleSearch() {
     // 添加点位后需要重新渲染地图
-    window.$gmap?.addPoints(gamemapStores.fillterMarks, gamemapStores.pointsIds)
+    window.$gmap?.addPoints(gamemapStores.fillterMarks, gamemapStores.showName, gamemapStores.pointsIds)
 }
 
+
+// 点击切换 显示 或者 隐藏标记点
 function switchMarks(mark: IGameMark) {
 
     if (gamemapStores.unshowMarks.includes(mark.id)) {
@@ -43,19 +52,16 @@ function switchMarks(mark: IGameMark) {
     }
     // console.log(gamemapStores.pointsIds);
 
-    window.$gmap?.addPoints(gamemapStores.fillterMarks, gamemapStores.pointsIds)
 
 }
 
 function clearAll() {
     gamemapStores.unshowMarks = gamemapStores.marks.map(mark => mark.id)
-    window.$gmap?.addPoints(gamemapStores.fillterMarks, gamemapStores.pointsIds)
 
 }
 
 function selectAll() {
     gamemapStores.unshowMarks = []
-    window.$gmap?.addPoints(gamemapStores.fillterMarks, gamemapStores.pointsIds)
 }
 
 
@@ -71,8 +77,15 @@ function selectAll() {
                     <v-img cover src="https://mod.3dmgame.com/static/upload/logo/croppedImg_67e41b904f5c9.jpg"></v-img>
                 </v-col>
                 <v-col cols="12" class="buttons">
-                    <el-button @click="selectAll">显示全部</el-button>
-                    <el-button @click="clearAll">隐藏全部</el-button>
+                    <div>
+                        <el-button @click="selectAll">显示全部</el-button>
+                        <el-button @click="clearAll">隐藏全部</el-button>
+                    </div>
+                    <div>
+                        <el-switch v-model="gamemapStores.showName" class="ml-2"
+                            style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949"
+                            active-text="显示标记点名称" />
+                    </div>
                 </v-col>
                 <v-col cols="12">
                     <el-input v-model="searchKeyword" placeholder="搜索标记点" @input="handleSearch">

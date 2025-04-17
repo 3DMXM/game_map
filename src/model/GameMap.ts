@@ -23,6 +23,8 @@ export class GameMap {
                         tileSize: options.tileSize
                     }
                 },
+                // 添加 glyphs 属性
+                glyphs: "mapbox://fonts/mapbox/{fontstack}/{range}.pbf",
                 layers: [
                     {
                         id: 'local-tiles-layer',
@@ -50,11 +52,11 @@ export class GameMap {
         this.isinit = true
     }
 
-    public async initGameMap(data: IGameMark[], popup: mapboxgl.Popup, LayerRef: HTMLElement, pointData: IGameMapPoint) {
+    public async initGameMap(data: IGameMark[], popup: mapboxgl.Popup, LayerRef: HTMLElement, pointData: IGameMapPoint, showText: boolean) {
 
         await this.loadAllImage(data)
 
-        const pointsIds = this.addPoints(data)
+        const pointsIds = this.addPoints(data, showText)
 
         this.mbgl.on('click', pointsIds, async (e) => {
             if (e.features) {
@@ -103,6 +105,15 @@ export class GameMap {
     public async loadAllImage(pointsList: IGameMark[]): Promise<void> {
         const imagePromises = pointsList.map((points) => {
             return new Promise<void>((resolve, reject) => {
+
+                const name = `image-${points.id}`
+                // 判断同名图片是否已被加载
+                if (this.mbgl.hasImage(name)) {
+                    resolve();
+                    return;
+                }
+
+
                 this.mbgl.loadImage(points.mark_type_icon, (error, image) => {
                     if (error) {
                         console.log(error);
@@ -110,7 +121,7 @@ export class GameMap {
                         return;
                     }
                     if (image) {
-                        this.mbgl.addImage(points.mark_type_name, image);
+                        this.mbgl.addImage(name, image);
                     }
                     resolve();
                 });
@@ -121,7 +132,7 @@ export class GameMap {
     }
 
 
-    public addPoints(pointsList: IGameMark[], oldIds: string[] = []) {
+    public addPoints(pointsList: IGameMark[], showText: boolean = false, oldIds: string[] = []) {
         // 移除旧的图层和数据源
         if (oldIds.length > 0) {
             // 首先移除图层，然后移除数据源
@@ -161,9 +172,21 @@ export class GameMap {
                         type: 'symbol',
                         source: sourceName,
                         layout: {
-                            'icon-image': points.mark_type_name,
-                            'icon-size': points.mark_type_scale || 0.3,
-                            'icon-allow-overlap': true
+                            'icon-image': `image-${points.id}`,
+                            'icon-size': points.mark_type_scale || 0.25,
+                            'icon-allow-overlap': true,
+                            // 根据showText参数决定是否显示文本
+                            'text-field': showText ? ['get', 'mark_name'] : '',
+                            'text-size': 14,
+                            'text-offset': [0, -1.5],
+                            'text-anchor': 'bottom',
+                            'text-allow-overlap': true,
+                        },
+                        paint: {
+                            // 文本样式
+                            'text-color': '#c6c6c6',
+                            'text-halo-color': '#000',
+                            'text-halo-width': 1
                         }
                     });
                 }

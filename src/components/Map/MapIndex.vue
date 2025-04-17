@@ -13,9 +13,9 @@ const pointData = ref({} as IGameMapPoint)
 
 let gmap = ref<GameMap>()
 
-
 async function initMap() {
-    // const { data } = await axios.get('/data/points.json')
+    const data = await gamemapStores.getMarksData()
+    gamemapStores.loading = false
 
     gmap.value = new GameMap({
         container: mapContainer.value,
@@ -29,62 +29,13 @@ async function initMap() {
 
     window.$gmap = gmap.value;
 
-    const data = await gamemapStores.getMarksData()
-
-    // let ids = gmap.addPoints(data)
-
-
     const popup = new mapboxgl.Popup({
         closeButton: false,
         closeOnClick: true,
         maxWidth: '376px',
         className: 'map-popup',
     });
-
-    gamemapStores.pointsIds = await gmap.value.initGameMap(data, popup, LayerRef.value, pointData.value)
-
-    // gmap.mbgl.on('click', ids, async (e) => {
-    //     if (e.features) {
-    //         const properties = e.features[0].properties;
-
-    //         // 添加安全解析函数
-    //         const safeJsonParse = (jsonStr: string | undefined | null, defaultValue: any = []) => {
-    //             if (!jsonStr) return defaultValue;
-    //             try {
-    //                 return JSON.parse(jsonStr);
-    //             } catch (e) {
-    //                 console.warn('JSON解析错误:', e);
-    //                 return defaultValue;
-    //             }
-    //         };
-
-    //         // 优化属性赋值
-    //         pointData.value = {
-    //             ...properties,
-    //             mark_images: safeJsonParse(properties?.mark_images),
-    //             mark_links: safeJsonParse(properties?.mark_links),
-    //             mark_position: safeJsonParse(properties?.mark_position, [0, 0])
-    //         } as IGameMapPoint;
-
-    //         console.log(pointData.value);
-
-    //         popup
-    //             .setLngLat(pointData.value.mark_position)
-    //             .setDOMContent(LayerRef.value)
-    //             .addTo(gmap.mbgl);
-
-    //     }
-
-    // });
-
-    // gmap.mbgl.on('mouseenter', ids, () => {
-    //     gmap.mbgl.getCanvas().style.cursor = 'pointer';
-    // });
-
-    // gmap.mbgl.on('mouseleave', ids, () => {
-    //     gmap.mbgl.getCanvas().style.cursor = '';
-    // });
-
+    gamemapStores.pointsIds = await gmap.value.initGameMap(data, popup, LayerRef.value, pointData.value, gamemapStores.showName)
 }
 
 

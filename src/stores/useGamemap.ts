@@ -8,6 +8,8 @@ export const useGamemap = defineStore("GameMap", {
         marks: [] as IGameMark[],
         unshowMarks: [] as number[],
         pointsIds: [] as string[],
+        showName: false,
+        loading: true,
     }),
     getters: {
         fillterMarks(state) {
