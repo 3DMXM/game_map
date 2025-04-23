@@ -1,14 +1,15 @@
 <script lang='ts' setup>
-// import 'mapbox-gl/dist/mapbox-gl.css';
-import mapboxgl from '@glossmod/mapbox-gl';
-import MarkerLayer from '@/components/Map/MarkerLayer.vue';
+
+import mapboxgl from '@glossmod/mapbox-gl'
+import MarkerLayer from '@/components/Map/MarkerLayer.vue'
 
 const main = useMain()
-
 const gamemapStores = useGamemap()
 
-const mapContainer = ref();
-const LayerRef = ref();
+const LayerRef = ref()
+const contextMenuRef = ref()
+const mapContainer = ref()
+
 const pointData = ref({} as IGameMapPoint)
 
 let gmap = ref<GameMap>()
@@ -17,25 +18,31 @@ async function initMap() {
     const data = await gamemapStores.getMarksData()
     gamemapStores.loading = false
 
-    gmap.value = new GameMap({
-        container: mapContainer.value,
-        tiles: '/uploads/tiles/91f38eb84ede4ad9809b3fe5906106ce/{z}/tile_{x}_{y}.webp',
-        tileSize: 512,
-        minzoom: 0,
-        maxzoom: 5,
-        center: [0, 0],
-        zoom: 2
-    })
-
-    window.$gmap = gmap.value;
-
     const popup = new mapboxgl.Popup({
         closeButton: false,
         closeOnClick: true,
         maxWidth: '376px',
         className: 'map-popup',
     });
-    gamemapStores.pointsIds = await gmap.value.initGameMap(data, popup, LayerRef.value, pointData.value, gamemapStores.showName)
+
+    gmap.value = new GameMap({
+        container: mapContainer.value,
+        tiles: '/uploads/out/{z}/{x}/{y}.webp',
+        tileSize: 256,
+        minzoom: 0,
+        maxzoom: 7,
+        center: [0, 0],
+        zoom: 3,
+        popup: popup,
+        LayerRef: LayerRef.value,
+        contextMenu: contextMenuRef.value,
+        isEdit: true
+    })
+
+    window.$gmap = gmap.value;
+
+    gamemapStores.pointsIds = await gmap.value.initGameMap(data, pointData.value, gamemapStores.showName)
+
 }
 
 
@@ -54,10 +61,14 @@ onMounted(() => {
 
 </script>
 <template>
-    <div ref="mapContainer" class="map-container"></div>
-    <div class="layer" ref="LayerRef">
+    <div class="map-popup-ref" ref="LayerRef">
         <MarkerLayer :point="pointData"></MarkerLayer>
     </div>
+    <div class="map-popup-ref" ref="contextMenuRef">
+        <contextMenu></contextMenu>
+    </div>
+    <div ref="mapContainer" class="map-container"></div>
+    <EditPoint></EditPoint>
 </template>
 <script lang='ts'>
 

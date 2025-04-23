@@ -10,11 +10,17 @@ export const useGamemap = defineStore("GameMap", {
         pointsIds: [] as string[],
         showName: false,
         loading: true,
+        showAddMarker: false,
+        editPointData: {
+            mark_name: "",
+            mark_type: "points",
+            mark_position: [0, 0]
+        } as IGameMapPoint
     }),
     getters: {
         fillterMarks(state) {
             return state.marks.filter(mark => !state.unshowMarks.includes(mark.id))
-        }
+        },
     },
     actions: {
         async getMarksData() {

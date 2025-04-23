@@ -32,3 +32,4 @@ coverage
 public/uploads
 
 .env
+*.d.ts

@@ -67,7 +67,7 @@ function selectAll() {
 
 </script>
 <template>
-    <v-navigation-drawer class="drawer" v-model="main.drawer" width="375">
+    <v-navigation-drawer class="drawer" floating v-model="main.drawer" width="375">
         <v-card>
             <v-card-text class="content">
                 <v-col cols="12">

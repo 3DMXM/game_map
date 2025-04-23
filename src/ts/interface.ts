@@ -9,8 +9,14 @@ declare global {
         tileSize: number
         minzoom: number
         maxzoom: number
+        popup: mapboxgl.Popup
+        LayerRef: HTMLElement
         center?: [number, number]
         zoom?: number
+        contextMenu?: HTMLElement
+        isEdit?: boolean
+        onPointDragEnd?: (pointId: string, newPosition: mapboxgl.LngLat) => void;
+
     }
 
     interface IGameMark {

@@ -3,7 +3,7 @@
         "id": 1,
         "mark_type_name": "任务地点",
         "mark_type_parent": "主要地点",
-        "mark_type_icon": "/images/point.png",
+        "mark_type_icon": "/images/Point.png",
         "marks": [
             {
                 "id": 1,

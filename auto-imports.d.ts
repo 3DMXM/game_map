@@ -7,6 +7,11 @@
 export {}
 declare global {
   const EffectScope: typeof import('vue')['EffectScope']
+  const ElForm: typeof import('element-plus/es')['ElForm']
+  const ElFormItem: typeof import('element-plus/es')['ElFormItem']
+  const ElInput: typeof import('element-plus/es')['ElInput']
+  const ElMessage: typeof import('element-plus/es')['ElMessage']
+  const ElMessageBox: typeof import('element-plus/es')['ElMessageBox']
   const GameMap: typeof import('./src/model/GameMap')['GameMap']
   const acceptHMRUpdate: typeof import('pinia')['acceptHMRUpdate']
   const axios: typeof import('axios')['default']
