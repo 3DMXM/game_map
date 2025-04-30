@@ -4,7 +4,7 @@
         "mark_type_name": "任务地点",
         "mark_type_parent": "主要地点",
         "mark_type_icon": "/images/Point.png",
-        "marks": [
+        "marks_point": [
             {
                 "id": 1,
                 "mark_type": "points",
@@ -94,7 +94,7 @@
         "mark_type_parent": "特殊地点",
         "mark_type_icon": "/images/danger.png",
         "mark_type_scale": 0.4,
-        "marks": [
+        "marks_point": [
             {
                 "id": 4,
                 "mark_type": "buffer",
@@ -184,7 +184,7 @@
         "mark_type_name": "资源点",
         "mark_type_parent": "收集道具",
         "mark_type_icon": "/images/resource.png",
-        "marks": [
+        "marks_point": [
             {
                 "id": 7,
                 "mark_type": "points",
@@ -239,7 +239,7 @@
         "mark_type_name": "隐藏宝藏",
         "mark_type_parent": "特殊地点",
         "mark_type_icon": "/images/treasure.webp",
-        "marks": [
+        "marks_point": [
             {
                 "id": 13,
                 "mark_type": "points",
