@@ -253,7 +253,6 @@ export class GameMap {
 
             // 如果开启了编辑模式，添加拖拽支持
             if (this.options.isEdit) {
-
                 // 使用Marker替代或增强图层点位，允许拖拽
                 const marker = new mapboxgl.Marker({
                     draggable: true,
@@ -265,11 +264,26 @@ export class GameMap {
                 // 存储marker引用
                 this.temporaryMarkers.set(`${point.id}`, marker);
 
+                const layerId = `points-${point.id}`;
+
+                // 添加拖拽开始事件
+                marker.on('dragstart', () => {
+                    // 在拖拽开始时隐藏原始点位
+                    if (this.mbgl.getLayer(layerId)) {
+                        this.mbgl.setLayoutProperty(layerId, 'visibility', 'none');
+                    }
+                });
+
                 // 添加拖拽结束事件
                 marker.on('dragend', () => {
                     const newPosition = marker.getLngLat();
                     // 更新GeoJSON数据源中的点位置
                     this.updatePointPosition(point.id, newPosition);
+
+                    // 拖拽结束后恢复原始点位可见性
+                    if (this.mbgl.getLayer(layerId)) {
+                        this.mbgl.setLayoutProperty(layerId, 'visibility', 'visible');
+                    }
 
                     // 如果有拖拽结束回调，可以在这里调用
                     if (this.options.onPointDragEnd) {
