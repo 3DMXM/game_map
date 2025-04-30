@@ -59,6 +59,20 @@ declare global {
         mark_links?: MarkLink[] | null;
         /** 标记点相关图片路径，可能为null */
         mark_images?: string[] | null;
+
+        /** 字体大小 */
+        textSize?: number;
+        /** 字体粗细 */
+        textHaloColor?: string;
+        /** 字体颜色 */
+        textColor?: string;
+
+        /** 范围颜色 */
+        fillColor?: string;
+        /** 范围透明度 */
+        fillOpacity?: number;
+        /** 范围描边颜色 */
+        fillOutlineColor?: string;
     }
 }
 

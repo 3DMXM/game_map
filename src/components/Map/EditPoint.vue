@@ -131,6 +131,33 @@ function save() {
                     </el-form-item>
                 </el-form>
             </el-form-item>
+            <el-form-item label="样式">
+                <el-form label-width="80" v-if="gamemapStores.editPointData.mark_type == 'points'">
+                    <el-form-item label="字体颜色">
+                        <el-color-picker v-model="gamemapStores.editPointData.textColor" show-alpha></el-color-picker>
+                    </el-form-item>
+                    <el-form-item label="字体大小">
+                        <el-input type='number' v-model="gamemapStores.editPointData.textSize"></el-input>
+                    </el-form-item>
+                    <el-form-item label="字体描边">
+                        <el-color-picker v-model="gamemapStores.editPointData.textHaloColor"
+                            show-alpha></el-color-picker>
+                    </el-form-item>
+                </el-form>
+
+                <el-form label-width="80" v-if="gamemapStores.editPointData.mark_type == 'buffer'">
+                    <el-form-item label="显示颜色">
+                        <el-color-picker v-model="gamemapStores.editPointData.fillColor"></el-color-picker>
+                    </el-form-item>
+                    <el-form-item label="透明度">
+                        <el-input type='number' v-model="gamemapStores.editPointData.fillOpacity"></el-input>
+                    </el-form-item>
+                    <el-form-item label="描边颜色">
+                        <el-color-picker v-model="gamemapStores.editPointData.fillOutlineColor"
+                            show-alpha></el-color-picker>
+                    </el-form-item>
+                </el-form>
+            </el-form-item>
             <el-form-item label="描述">
                 <el-input v-model="gamemapStores.editPointData.mark_des" type="textarea"></el-input>
             </el-form-item>

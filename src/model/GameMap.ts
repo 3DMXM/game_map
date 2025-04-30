@@ -237,16 +237,17 @@ export class GameMap {
                     'icon-allow-overlap': true,
                     // 根据showText参数决定是否显示文本
                     'text-field': showText ? ['get', 'mark_name'] : '',
-                    'text-size': 14,
+                    // 'text-size': 14,
+                    'text-size': ['coalesce', ['get', 'textSize'], 14],
                     'text-offset': [0, -1.5],
                     'text-anchor': 'bottom',
                     'text-allow-overlap': true,
                 },
                 paint: {
                     // 文本样式
-                    'text-color': '#c6c6c6',
-                    'text-halo-color': '#000',
-                    'text-halo-width': 1
+                    'text-color': ['coalesce', ['get', 'textColor'], '#c6c6c6'],
+                    'text-halo-color': ['coalesce', ['get', 'textHaloColor'], '#000'],
+                    'text-halo-width': 1,
                 }
             });
 

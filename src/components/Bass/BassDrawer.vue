@@ -66,9 +66,6 @@ function selectAll() {
     gamemapStores.unshowMarks = []
 }
 
-function unBuddleEvents() {
-    window.$gmap?.unBuddleEvents(gamemapStores.pointsIds)
-}
 
 </script>
 <template>
