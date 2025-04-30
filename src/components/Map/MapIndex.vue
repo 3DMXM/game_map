@@ -34,6 +34,7 @@ async function initMap() {
         center: [0, 0],
         zoom: 3,
         popup: popup,
+        pointData: pointData.value,
         LayerRef: LayerRef.value,
         contextMenu: contextMenuRef.value,
         isEdit: true
@@ -41,7 +42,7 @@ async function initMap() {
 
     window.$gmap = gmap.value;
 
-    gamemapStores.pointsIds = await gmap.value.initGameMap(data, pointData.value, gamemapStores.showName)
+    gamemapStores.pointsIds = await gmap.value.initGameMap(data, gamemapStores.showName)
 
 }
 

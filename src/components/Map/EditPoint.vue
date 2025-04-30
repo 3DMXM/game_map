@@ -1,10 +1,6 @@
 <script lang='ts' setup>
-import type { CascaderOption } from 'element-plus';
 
 const gamemapStores = useGamemap()
-
-const desRef = ref()
-
 
 const props = {
     expandTrigger: 'hover' as const,
@@ -94,11 +90,12 @@ function editLink(item: { label: string, url: string }) {
 }
 
 function uploadImages() {
+    // 等待后端接口
 
 }
 
 function save() {
-
+    // 等待后端接口
 }
 
 

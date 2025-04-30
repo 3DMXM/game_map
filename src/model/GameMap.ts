@@ -21,6 +21,10 @@ export class GameMap {
 
     private markerList: mapboxgl.Marker[] = []
 
+    private boundClickHandler: any;
+    private boundMouseEnterHandler: any;
+    private boundMouseLeaveHandler: any;
+    private boundContextmenuEventHandler: any;
 
     constructor(options: IGameMapOptions) {
         this.options = options
@@ -109,63 +113,21 @@ export class GameMap {
      * @param showText 
      * @returns 
      */
-    public async initGameMap(data: IGameMark[], pointData: IGameMapPoint, showText: boolean) {
+    public async initGameMap(data: IGameMark[], showText: boolean) {
 
         await this.loadAllImage(data)
 
         const pointsIds = this.addPoints(data, showText)
 
-        this.mbgl.on('click', pointsIds, async (e) => {
-            if (e.features) {
-                const properties = e.features[0].properties;
 
-                // 添加安全解析函数
-                const safeJsonParse = (jsonStr: string | undefined | null, defaultValue: any = []) => {
-                    if (!jsonStr) return defaultValue;
-                    try {
-                        return JSON.parse(jsonStr);
-                    } catch (e) {
-                        console.warn('JSON解析错误:', e);
-                        return defaultValue;
-                    }
-                };
-
-                // // 优化属性赋值
-                // 更新传入的pointData对象，而不是创建新对象
-                Object.assign(pointData, {
-                    ...properties,
-                    mark_images: safeJsonParse(properties?.mark_images),
-                    mark_links: safeJsonParse(properties?.mark_links),
-                    mark_position: safeJsonParse(properties?.mark_position, [0, 0])
-                });
-
-                // console.log(e);
-
-
-                this.options.popup
-                    .setLngLat(pointData.mark_position)
-                    .setDOMContent(this.options.LayerRef)
-                    .addTo(this.mbgl);
-            }
-        });
-
-        this.mbgl.on('mouseenter', pointsIds, () => {
-            this.mbgl.getCanvas().style.cursor = 'pointer';
-        });
-
-        this.mbgl.on('mouseleave', pointsIds, () => {
-            this.mbgl.getCanvas().style.cursor = '';
-        });
-
-        if (this.options.isEdit) {
-            // 添加右键菜单事件
-            this.setupContextMenu();
-        }
 
         return pointsIds
     }
 
-    // 加载所有图片
+    /**
+     * 加载所有图片
+     * @param pointsList 列表
+     */
     public async loadAllImage(pointsList: IGameMark[]): Promise<void> {
         const imagePromises = pointsList.map((points) => {
             return new Promise<void>((resolve, reject) => {
@@ -193,7 +155,15 @@ export class GameMap {
     }
 
 
-    public addPoints(pointsList: IGameMark[], showText: boolean = false, oldIds: string[] = []) {
+    /**
+     * 添加点位到地图上
+     * @param pointsList 点位列表
+     * @param showText 是否显示文本
+     * @param oldIds 旧的图层ID列表
+     * @param re 是否重新添加
+     * @returns 新的图层ID列表
+     */
+    public addPoints(pointsList: IGameMark[], showText: boolean = false, oldIds: string[] = [], re: boolean = false) {
         // 移除旧的图层和数据源
         if (oldIds.length > 0) {
             // 首先移除图层，然后移除数据源
@@ -206,19 +176,40 @@ export class GameMap {
                     this.mbgl.removeSource(id);
                 }
             });
+
+            // 再移除事件
+            this.unBuddleEvents(oldIds)
+        }
+
+        if (this.markerList.length > 0 && re) {
+            // 如果是重新渲染, 则移除旧的marker
+            this.markerList.forEach(item => {
+                item.remove()
+            })
+            this.markerList = []
         }
 
         let newIds: string[] = [];
 
         pointsList.forEach((mark) => {
-            mark.marks.forEach(point => {
+            mark.marks_point.forEach(point => {
                 newIds.push(...this.addPointsToMap(point, mark, showText))
             });
         });
 
+        this.addEventToPoints(newIds)
+
         return newIds;
     }
 
+    /**
+     * 添加点位到地图上
+     * @param point 点位数据
+     * @param mark 点位类型数据
+     * @param showText 是否显示文本
+     * @param re 是否重新添加
+     * @returns 新的图层ID列表
+     */
     public addPointsToMap(point: IGameMapPoint, mark: IGameMark, showText?: boolean) {
         let newIds = [];
 
@@ -261,13 +252,6 @@ export class GameMap {
 
             // 如果开启了编辑模式，添加拖拽支持
             if (this.options.isEdit) {
-
-                if (this.markerList.length > 0) {
-                    this.markerList.forEach(item => {
-                        item.remove()
-                    })
-                    this.markerList = []
-                }
 
                 // 使用Marker替代或增强图层点位，允许拖拽
                 const marker = new mapboxgl.Marker({
@@ -325,6 +309,37 @@ export class GameMap {
     }
 
 
+    public addEventToPoints(pointsIds: string[]) {
+        // // 清空旧的所有事件
+        // this.unBuddleEvents(pointsIds)
+
+        // 保存绑定后的函数引用
+        this.boundClickHandler = this.clickEventHandler.bind(this);
+        this.boundMouseEnterHandler = this.mouseenterEventHandler.bind(this);
+        this.boundMouseLeaveHandler = this.mouseleaveEventHandler.bind(this);
+
+
+        // 添加新的事件
+        this.mbgl.on('click', pointsIds, this.boundClickHandler);
+        this.mbgl.on('mouseenter', pointsIds, this.boundMouseEnterHandler);
+        this.mbgl.on('mouseleave', pointsIds, this.boundMouseLeaveHandler);
+
+        if (this.options.isEdit) {
+            // 添加右键菜单事件
+            this.setupContextMenu();
+        }
+    }
+
+    // 清空所有事件
+    public unBuddleEvents(pointsIds: string[]) {
+        // 移除所有现有的点击、鼠标进入和鼠标离开事件
+        this.mbgl.off('click', pointsIds, this.boundClickHandler);
+        this.mbgl.off('mouseenter', pointsIds, this.boundMouseEnterHandler);
+        this.mbgl.off('mouseleave', pointsIds, this.boundMouseLeaveHandler);
+        this.mbgl.off('contextmenu', this.boundContextmenuEventHandler);
+        console.log("unBuddleEvents", pointsIds);
+    }
+
     /**
      * 设置右键菜单，支持右键添加新点位
      * @private
@@ -335,20 +350,83 @@ export class GameMap {
             e.preventDefault();
         });
 
-        // 监听右键点击
-        this.mbgl.on('contextmenu', (e) => {
-            if (this.options.contextMenu) {
-                // 移除旧的菜单
-                this.contextMenuPopup.remove();
-                // 添加新的菜单
-                this.contextMenuPopup.setLngLat(e.lngLat)
-                    .setDOMContent(this.options.contextMenu)
-                    .addTo(this.mbgl);
+        this.boundContextmenuEventHandler = this.contextmenuEventHandler.bind(this);
 
-                // 记录右键事件
-                this.contextmenuEvent = e
-            }
-        });
+        // 监听右键点击
+        this.mbgl.on('contextmenu', this.boundContextmenuEventHandler);
+    }
+
+    /**
+     * 鼠标点击事件处理函数
+     * @param e 
+     */
+    private clickEventHandler(e: mapboxgl.MapMouseEvent) {
+        if (e.features) {
+            const properties = e.features[0].properties;
+
+            // 添加安全解析函数
+            const safeJsonParse = (jsonStr: string | undefined | null, defaultValue: any = []) => {
+                if (!jsonStr) return defaultValue;
+                try {
+                    return JSON.parse(jsonStr);
+                } catch (e) {
+                    console.warn('JSON解析错误:', e);
+                    return defaultValue;
+                }
+            };
+
+            // // 优化属性赋值
+            // 更新传入的pointData对象，而不是创建新对象
+            Object.assign(this.options.pointData, {
+                ...properties,
+                mark_images: safeJsonParse(properties?.mark_images),
+                mark_links: safeJsonParse(properties?.mark_links),
+                mark_position: safeJsonParse(properties?.mark_position, [0, 0])
+            });
+
+
+            // console.log(e);
+
+
+            this.options.popup
+                .setLngLat(this.options.pointData.mark_position)
+                .setDOMContent(this.options.LayerRef)
+                .addTo(this.mbgl);
+        }
+    }
+
+    /**
+     * 右键菜单事件处理函数
+     * @param e 
+     */
+    private contextmenuEventHandler(e: mapboxgl.MapMouseEvent) {
+        if (this.options.contextMenu) {
+            // 移除旧的菜单
+            this.contextMenuPopup.remove();
+            // 添加新的菜单
+            this.contextMenuPopup.setLngLat(e.lngLat)
+                .setDOMContent(this.options.contextMenu)
+                .addTo(this.mbgl);
+
+            // 记录右键事件
+            this.contextmenuEvent = e
+        }
+    }
+
+    /**
+     * 鼠标进入事件处理函数
+     * @param e 
+     */
+    private mouseenterEventHandler(e: mapboxgl.MapMouseEvent) {
+        this.mbgl.getCanvas().style.cursor = 'pointer';
+    }
+
+    /**
+     * 鼠标离开事件处理函数
+     * @param e 
+     */
+    private mouseleaveEventHandler(e: mapboxgl.MapMouseEvent) {
+        this.mbgl.getCanvas().style.cursor = '';
     }
 
     /**
@@ -376,7 +454,7 @@ export class GameMap {
      * @param pointId 点位ID
      * @param newPosition 新位置
      */
-    public updatePointPosition(pointId: number, newPosition: mapboxgl.LngLat): void {
+    public updatePointPosition(pointId: number, newPosition: mapboxgl.LngLat) {
         const sourceName = `source-${pointId}`;
         const source = this.mbgl.getSource(sourceName) as mapboxgl.GeoJSONSource;
 
@@ -400,4 +478,6 @@ export class GameMap {
             source.setData(geoJSON);
         }
     }
+
+
 }

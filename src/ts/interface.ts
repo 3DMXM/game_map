@@ -11,6 +11,7 @@ declare global {
         maxzoom: number
         popup: mapboxgl.Popup
         LayerRef: HTMLElement
+        pointData: IGameMapPoint
         center?: [number, number]
         zoom?: number
         contextMenu?: HTMLElement
@@ -31,7 +32,7 @@ declare global {
         /** 类型组图标缩放比例 */
         mark_type_scale: number;
         /** 此类型下的所有标记点 */
-        marks: IGameMapPoint[];
+        marks_point: IGameMapPoint[];
     }
 
     interface MarkLink {

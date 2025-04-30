@@ -19,9 +19,9 @@ const types = computed(() => {
         if (type) {
             type.list.push(item)
             // 确保总数正确计算
-            type.total = type.list.reduce((sum, mark) => sum + mark.marks.length, 0)
+            type.total = type.list.reduce((sum, mark) => sum + mark.marks_point.length, 0)
         } else {
-            types.push({ name: item.mark_type_parent, list: [item], total: item.marks.length })
+            types.push({ name: item.mark_type_parent, list: [item], total: item.marks_point.length })
         }
     })
 
@@ -30,7 +30,9 @@ const types = computed(() => {
 
 
 watch([() => gamemapStores.unshowMarks, () => gamemapStores.showName], () => {
-    window.$gmap?.addPoints(gamemapStores.fillterMarks, gamemapStores.showName, gamemapStores.pointsIds,)
+    if (window.$gmap) {
+        gamemapStores.pointsIds = window.$gmap.addPoints(gamemapStores.fillterMarks, gamemapStores.showName, gamemapStores.pointsIds, true)
+    }
 
 }, { deep: true })
 
@@ -38,7 +40,7 @@ watch([() => gamemapStores.unshowMarks, () => gamemapStores.showName], () => {
 // 处理搜索输入变更
 function handleSearch() {
     // 添加点位后需要重新渲染地图
-    window.$gmap?.addPoints(gamemapStores.fillterMarks, gamemapStores.showName, gamemapStores.pointsIds)
+    window.$gmap?.addPoints(gamemapStores.fillterMarks, gamemapStores.showName, gamemapStores.pointsIds, true)
 }
 
 
@@ -64,10 +66,14 @@ function selectAll() {
     gamemapStores.unshowMarks = []
 }
 
+function unBuddleEvents() {
+    window.$gmap?.unBuddleEvents(gamemapStores.pointsIds)
+}
 
 </script>
 <template>
-    <v-navigation-drawer class="drawer" floating v-model="main.drawer" width="375">
+
+    <v-navigation-drawer class="drawer d-none d-md-block" floating v-model="main.drawer" width="375">
         <v-card>
             <v-card-text class="content">
                 <v-col cols="12">

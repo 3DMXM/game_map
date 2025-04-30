@@ -8,6 +8,7 @@ const props = defineProps<{
 
 const gamemapStores = useGamemap()
 
+
 function onclose() {
     // 获取所有弹出窗口并移除
     const popups = document.getElementsByClassName('mapboxgl-popup');
