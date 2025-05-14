@@ -69,16 +69,19 @@ function selectAll() {
 
 </script>
 <template>
-
-    <v-navigation-drawer class="drawer d-none d-md-block" floating v-model="main.drawer" width="375">
+    <v-navigation-drawer class="drawer" v-model="main.drawer" :width="375"
+        :location="$vuetify.display.mobile ? 'bottom' : undefined" :mobile="$vuetify.display.mobile">
         <v-card>
             <v-card-text class="content">
-                <v-col cols="12">
-                    <h1 class="title">潜行者2 互动地图</h1>
-                </v-col>
-                <v-col cols="12">
-                    <v-img cover src="https://mod.3dmgame.com/static/upload/logo/croppedImg_67e41b904f5c9.jpg"></v-img>
-                </v-col>
+                <template v-if="!$vuetify.display.mobile">
+                    <v-col cols="12">
+                        <h1 class="title">潜行者2 互动地图</h1>
+                    </v-col>
+                    <v-col cols="12">
+                        <v-img cover
+                            src="https://mod.3dmgame.com/static/upload/logo/croppedImg_67e41b904f5c9.jpg"></v-img>
+                    </v-col>
+                </template>
                 <v-col cols="12" class="buttons">
                     <div>
                         <el-button @click="selectAll">显示全部</el-button>
@@ -115,7 +118,7 @@ function selectAll() {
                 </v-col>
             </v-card-text>
         </v-card>
-        <div class="sidebar-close" @click="main.drawer = !main.drawer">
+        <div v-if="!$vuetify.display.mobile" class="sidebar-close" @click="main.drawer = !main.drawer">
             <v-icon v-if="main.drawer">mdi-chevron-double-left</v-icon>
             <v-icon v-else>mdi-chevron-double-right</v-icon>
         </div>

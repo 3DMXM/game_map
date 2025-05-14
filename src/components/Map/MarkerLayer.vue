@@ -7,7 +7,7 @@ const props = defineProps<{
 }>()
 
 const gamemapStores = useGamemap()
-
+const main = useMain()
 
 function onclose() {
     // 获取所有弹出窗口并移除
@@ -17,6 +17,7 @@ function onclose() {
             popup.remove();
         });
     }
+    main.movileDrawer = false
 }
 
 function position() {
@@ -37,29 +38,19 @@ function copy() {
     // 构建包含点位ID的URL
     const url = new URL(window.location.href)
 
-    // 确保移除旧的点位参数，避免重复
-    url.searchParams.delete('pointId')
-
     // 添加点位ID参数
-    url.searchParams.set('pointId', `${point.id}`)
+    url.searchParams.set('x', `${point.mark_position[0]}`)
+    url.searchParams.set('y', `${point.mark_position[1]}`)
 
     // 复制链接到剪贴板
     navigator.clipboard.writeText(url.toString())
         .then(() => {
             // 提示用户复制成功
-            ElMessage({
-                message: '链接已复制到剪贴板',
-                type: 'success',
-                duration: 2000
-            })
+            ElMessage.success("链接已复制到剪贴板")
         })
         .catch(err => {
             console.error('无法复制链接:', err)
-            ElMessage({
-                message: '复制失败',
-                type: 'error',
-                duration: 2000
-            })
+            ElMessage.error("无法复制链接")
         })
 }
 
@@ -71,7 +62,7 @@ function edit() {
 
 </script>
 <template>
-    <v-card class="card" width="376px">
+    <v-card class="card" :width="$vuetify.display.mobile ? 'auto' : '376px'">
         <v-card-title>
             <div class="tooltip-header">
                 <h3>{{ point.mark_name }}

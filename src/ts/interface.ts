@@ -16,6 +16,7 @@ declare global {
         zoom?: number
         contextMenu?: HTMLElement
         isEdit?: boolean
+        mobile?: boolean
         onPointDragEnd?: (pointId: string, newPosition: mapboxgl.LngLat) => void;
 
     }

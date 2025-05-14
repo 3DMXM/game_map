@@ -399,14 +399,21 @@ export class GameMap {
                 mark_position: safeJsonParse(properties?.mark_position, [0, 0])
             });
 
+            console.log(this.options.mobile);
 
-            // console.log(e);
+            if (this.options.mobile) {
+                const main = useMain()
 
+                main.movileDrawer = true
+                console.log(main.movileDrawer);
 
-            this.options.popup
-                .setLngLat(this.options.pointData.mark_position)
-                .setDOMContent(this.options.LayerRef)
-                .addTo(this.mbgl);
+            } else {
+                this.options.popup
+                    .setLngLat(this.options.pointData.mark_position)
+                    .setDOMContent(this.options.LayerRef)
+                    .addTo(this.mbgl);
+            }
+
         }
     }
 

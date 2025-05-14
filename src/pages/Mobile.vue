@@ -2,19 +2,20 @@
 
 </script>
 <template>
-    <!-- <v-layout>
-        <BassDrawer></BassDrawer>
+    <v-layout>
         <v-main>
             <v-container style="padding: 0;" fluid>
-                <RouterView></RouterView>
+                <MobileHeader></MobileHeader>
+                <MapIndex></MapIndex>
+                <MobileBottom></MobileBottom>
             </v-container>
         </v-main>
-    </v-layout> -->
-    <RouterView></RouterView>
+    </v-layout>
 </template>
 <script lang='ts'>
+
 export default {
-    name: 'DefaultLayout',
+    name: 'Mobile',
 }
 </script>
 <style lang='less' scoped></style>

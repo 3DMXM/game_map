@@ -38,6 +38,9 @@ declare module 'vue' {
     MapLoading: typeof import('./src/components/Model/MapLoading.vue')['default']
     Markdown: typeof import('./src/components/Markdown/Markdown.vue')['default']
     MarkerLayer: typeof import('./src/components/Map/MarkerLayer.vue')['default']
+    MobileBottom: typeof import('./src/components/Mobile/MobileBottom.vue')['default']
+    MobileHeader: typeof import('./src/components/Mobile/MobileHeader.vue')['default']
+    MobileMapIndex: typeof import('./src/components/Mobile/MobileMapIndex.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }

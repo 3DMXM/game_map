@@ -1,4 +1,5 @@
 <script lang='ts' setup>
+import { useDisplay } from "vuetify"
 
 import mapboxgl from '@glossmod/mapbox-gl'
 import MarkerLayer from '@/components/Map/MarkerLayer.vue'
@@ -13,6 +14,11 @@ const mapContainer = ref()
 const pointData = ref({} as IGameMapPoint)
 
 let gmap = ref<GameMap>()
+
+const display = useDisplay()
+
+const mobile = computed(() => display.mobile.value)
+
 
 async function initMap() {
     const data = await gamemapStores.getMarksData()
@@ -37,7 +43,8 @@ async function initMap() {
         pointData: pointData.value,
         LayerRef: LayerRef.value,
         contextMenu: contextMenuRef.value,
-        isEdit: true
+        isEdit: true,
+        mobile: mobile.value,
     })
 
     window.$gmap = gmap.value;
@@ -59,7 +66,6 @@ onMounted(() => {
 })
 
 
-
 </script>
 <template>
     <div class="map-popup-ref" ref="LayerRef">
@@ -70,6 +76,12 @@ onMounted(() => {
     </div>
     <div ref="mapContainer" class="map-container"></div>
     <EditPoint></EditPoint>
+
+    <!-- 移动端 -->
+    <v-navigation-drawer v-if="$vuetify.display.mobile" v-model="main.movileDrawer" location="bottom" :mobile="true"
+        :class="{ 'mobile-drawer': main.movileDrawer }">
+        <MarkerLayer :point="pointData"></MarkerLayer>
+    </v-navigation-drawer>
 </template>
 <script lang='ts'>
 
@@ -81,5 +93,9 @@ export default {
 .map-container {
     flex: 1;
     height: 100vh;
+}
+
+.mobile-drawer {
+    height: auto !important;
 }
 </style>

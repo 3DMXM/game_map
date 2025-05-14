@@ -8,7 +8,14 @@ const gamemapStores = useGamemap()
             <MapLoading></MapLoading>
         </template>
 </el-skeleton> -->
-    <MapIndex></MapIndex>
+    <v-layout>
+        <BassDrawer></BassDrawer>
+        <v-main>
+            <v-container style="padding: 0;" fluid>
+                <MapIndex></MapIndex>
+            </v-container>
+        </v-main>
+    </v-layout>
 </template>
 <script lang='ts'>
 
