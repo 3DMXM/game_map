@@ -33,7 +33,7 @@ async function initMap() {
 
     gmap.value = new GameMap({
         container: mapContainer.value,
-        tiles: '/uploads/out/{z}/{x}/{y}.webp',
+        tiles: 'http://tiles.aoe.top/uploads/out/{z}/{x}/{y}.webp',
         tileSize: 256,
         minzoom: 0,
         maxzoom: 7,
