@@ -35,12 +35,10 @@ declare module 'vue' {
     ElSelect: typeof import('element-plus/es')['ElSelect']
     ElSwitch: typeof import('element-plus/es')['ElSwitch']
     MapIndex: typeof import('./src/components/Map/MapIndex.vue')['default']
-    MapLoading: typeof import('./src/components/Model/MapLoading.vue')['default']
     Markdown: typeof import('./src/components/Markdown/Markdown.vue')['default']
     MarkerLayer: typeof import('./src/components/Map/MarkerLayer.vue')['default']
     MobileBottom: typeof import('./src/components/Mobile/MobileBottom.vue')['default']
     MobileHeader: typeof import('./src/components/Mobile/MobileHeader.vue')['default']
-    MobileMapIndex: typeof import('./src/components/Mobile/MobileMapIndex.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }
