@@ -12,7 +12,6 @@ const gamemapStores = useGamemap()
             </v-btn>
         </div>
     </div>
-    <BassDrawer></BassDrawer>
 </template>
 <script lang='ts'>
 

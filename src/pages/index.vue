@@ -3,19 +3,7 @@ const gamemapStores = useGamemap()
 
 </script>
 <template>
-    <!-- <el-skeleton :loading="gamemapStores.loading">
-        <template #template>
-            <MapLoading></MapLoading>
-        </template>
-</el-skeleton> -->
-    <v-layout>
-        <BassDrawer></BassDrawer>
-        <v-main>
-            <v-container style="padding: 0;" fluid>
-                <MapIndex></MapIndex>
-            </v-container>
-        </v-main>
-    </v-layout>
+    <MapIndex></MapIndex>
 </template>
 <script lang='ts'>
 

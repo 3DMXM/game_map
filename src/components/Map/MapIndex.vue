@@ -61,6 +61,12 @@ watch(() => main.drawer, () => {
     }, 200);
 })
 
+watch(mobile, () => {
+    if (window.$gmap) {
+        window.$gmap.options.mobile = mobile.value
+    }
+})
+
 onMounted(() => {
     initMap()
 })
