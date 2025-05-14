@@ -1,1 +1,0 @@
-import{u as o,_,V as s,a as c,b as u,c as p}from"./VMain-EfV8avKV.js";import{d as l,c as r,o as d,w as n,a}from"./index-97HcsUW2.js";const m={name:"Index"},w=l({...m,setup(i){return o(),(f,x)=>{const e=_,t=u;return d(),r(p,null,{default:n(()=>[a(e),a(s,null,{default:n(()=>[a(c,{style:{padding:"0"},fluid:""},{default:n(()=>[a(t)]),_:1})]),_:1})]),_:1})}}});export{w as default};
