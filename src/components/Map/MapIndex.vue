@@ -51,6 +51,17 @@ async function initMap() {
 
     gamemapStores.pointsIds = await gmap.value.initGameMap(data, gamemapStores.showName)
 
+    // 获取 链接参数中的 x 和 y
+    // /?x=-35&y=30
+    const urlParams = new URLSearchParams(window.location.search);
+    const x = urlParams.get('x');
+    const y = urlParams.get('y');
+
+    if (x && y) {
+        window.$gmap.mbgl.setCenter([parseFloat(x), parseFloat(y)]);
+        window.$gmap.mbgl.setZoom(6);
+    }
+
 }
 
 
