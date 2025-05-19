@@ -62,6 +62,8 @@ export class GameMap {
             preserveDrawingBuffer: true,
             renderWorldCopies: false,
             doubleClickZoom: false,
+            pitchWithRotate: false, // 禁止倾斜与旋转关联
+            bearingSnap: 0, // 设置为0以禁用方位角捕捉
             // rasterFadeDuration: 0 // 禁用瓦片淡入淡出效果，防止过渡黑屏
         })
 
